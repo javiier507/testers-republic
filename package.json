@@ -13,6 +13,7 @@
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
+    "commit": "git-cz",
     "prepare": "husky",
     "deploy": "pnpm run build && wrangler deploy",
     "db:generate": "drizzle-kit generate",
@@ -20,6 +21,11 @@
     "db:push": "drizzle-kit push",
     "db:pull": "drizzle-kit pull",
     "db:studio": "drizzle-kit studio"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
@@ -43,6 +49,8 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.5",
     "@cloudflare/vite-plugin": "^1.26.0",
+    "@commitlint/cli": "20.5.0",
+    "@commitlint/config-conventional": "20.5.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/devtools-vite": "0.8.6",
     "@types/better-sqlite3": "^7.6.0",
@@ -50,6 +58,8 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "commitizen": "4.3.1",
+    "cz-conventional-changelog": "3.3.0",
     "dotenv": "^17.3.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
