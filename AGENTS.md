@@ -29,7 +29,8 @@ English is the official language of this repository. Everything in it must be wr
 ### Biome
 
 - When you need to lint or format code, run Biome **only against the specific files you just created or modified** — e.g. `pnpm exec biome check --write path/to/file-a.ts path/to/file-b.tsx`. Always pass explicit file paths.
-- **Never run Biome unscoped locally** (`biome check .`, `biome format --write .`, or any invocation without an explicit file list) on the whole repo or an entire app/package. An unscoped run can reformat or rewrite dozens or hundreds of unrelated files, which adds noise to the diff, pollutes the working tree, and clutters the context with irrelevant changes.
+- Explicit file paths still respect the `files.includes` configuration in `biome.json`. Do not bypass its exclusions for `src/routeTree.gen.ts` or `src/styles.css`.
+- **Never run Biome unscoped locally** (`biome check .`, `biome format --write .`, or any invocation without an explicit file list) on the whole repo or an entire app/package. Runs without `--write` only check files, but can produce unrelated diagnostics. Runs with `--write` can reformat or rewrite unrelated files, adding noise to the diff and polluting the working tree. Keep both checks and writes scoped to the files you created or modified.
 - **In CI, run Biome only on the files that changed in the current PR or push.** Use a changed-files action (e.g., `tj-actions/changed-files`) to generate the list, then invoke `pnpm exec biome ci <files>`. This keeps the CI scoped and avoids failing on unrelated pre-existing lint debt.
 
 ## Skills
