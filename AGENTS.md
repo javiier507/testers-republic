@@ -17,6 +17,11 @@ English is the official language of this repository. Everything in it must be wr
 
 - Documents in `docs/` are useful context but not an absolute source of truth — they can become outdated over time. When in doubt, verify against the current code rather than trusting a doc at face value.
 
+### TanStack Start documentation
+
+- For TanStack Start tasks, consult the [official Start LLM documentation index](https://tanstack.com/start/latest/llms.txt) first. Follow the relevant React Markdown page for the task rather than loading the entire documentation.
+- Check examples against the version of `@tanstack/react-start` installed in this project; the `latest` docs may describe newer APIs.
+
 ### Git
 
 - **Never run git commands on your own** — no `git add`, `git commit`, or `git push`. Run them only when the developer explicitly asks.
