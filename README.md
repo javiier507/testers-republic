@@ -41,6 +41,7 @@ pnpm format
 pnpm check
 ```
 
+Husky runs `lint-staged` before each commit, checking only staged files with Biome. Hooks are installed by `pnpm install` via the `prepare` script. If dependencies were already installed before this setup, run `pnpm run prepare` once to activate the hook locally. Files excluded by `biome.json` are not checked.
 
 ## Deploy to Cloudflare Workers
 
