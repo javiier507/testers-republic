@@ -132,7 +132,7 @@ Si vence el tiempo en el top, la app vuelve a la cola con sus postulantes; si la
 
 ## Reglas de operación
 
-Cada dev tiene una sola app activa a la vez, que avanza por orden de llegada y sale del top al conseguir 15 postulantes.
+Cada dev tiene una sola app activa a la vez, que avanza por orden de llegada y sale del top al conseguir el mínimo de postulantes de su plan: 12 en el gratuito, 15 en el de pago.
 
 ### Subida de una app
 
