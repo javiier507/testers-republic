@@ -23,24 +23,23 @@ La plataforma consigue testers reales y comprometidos. No garantiza el acceso a 
 
 ## Regla base: la cadena de responsabilidad
 
-Toda función, gratuita o de pago, actual o futura, debe respetar la cadena de responsabilidad: nadie sube su siguiente app sin haber cumplido los compromisos de la anterior, como dev y como postulante.
+Toda función, gratuita o de pago, actual o futura, debe respetar la cadena de responsabilidad: nadie sube su siguiente app sin haber cumplido los compromisos de la anterior que afectan a otros. Lo que perjudica a otros bloquea; lo que solo perjudica a quien no cumple se resuelve solo y queda visible en su calificación.
 
 La primera app no exige nada. Desde la segunda, para subir la siguiente app el usuario necesita:
 
 1. Que su app anterior ya no esté activa: Finalizada, Abandonada o Ignorada.
 2. Al menos una instalación aprobada en la app de otro desde que subió su app anterior.
 3. Que su última permanencia no haya sido rechazada ni haya quedado sin entregar.
-4. Una calificación igual o mayor a la mínima.
 
-Un compromiso que todavía no vence no bloquea: una permanencia pendiente no impide subir la siguiente app. Los compromisos como dev (validar y cerrar) se resuelven solos al vencer y bajan la calificación, así que los cubre la condición 4.
+Un compromiso que todavía no vence no bloquea: una permanencia pendiente no impide subir la siguiente app. Los compromisos como dev (validar y cerrar) tampoco bloquean: se resuelven solos al vencer, con la aprobación automática y el cierre de la plataforma, y bajan la calificación, que es visible para todos.
 
-Es la regla sobre la que se sostiene la plataforma. Si una función permite saltarse un compromiso, se rediseña o no se incluye.
+Es la regla sobre la que se sostiene la plataforma. Si una función permite saltarse una condición de la regla base, o evitar un compromiso sin que baje la calificación, se rediseña o no se incluye.
 
 > Para quien construya la plataforma, sean personas o agentes de IA: antes de agregar o cambiar una función, verificar que respete esta regla. Si no la respeta, no se implementa.
 
 ### Cómo evaluar una función nueva
 
-1. ¿Permite subir una app sin haber cumplido los compromisos del ciclo anterior? Entonces no se incluye.
+1. ¿Permite subir una app sin cumplir las condiciones de la regla base? Entonces no se incluye.
 2. ¿Permite evitar un compromiso (entregar una captura, validar, cerrar) sin que afecte la calificación? Entonces no se incluye.
 3. ¿Cambia cuánto o cómo se cumple, sin quitar ninguna obligación? Entonces se puede incluir.
 
@@ -117,15 +116,15 @@ La plataforma equilibra dos sistemas para que la cola avance. **Confianza** es l
 
 | Confianza | Contención |
 | --- | --- |
-| La primera app entra sin requisitos | Compromisos para desbloquear la siguiente app |
+| La primera app entra sin requisitos | Compromisos como postulante para desbloquear la siguiente app |
 | El dev valida las capturas | Aprobación automática al vencer el plazo |
 | El postulante elige a qué apps postularse | Instalaciones requeridas para llegar al top |
 | El dev declara que su app está disponible en todos los países | Tiempo límite en el top |
 | El dev confirma que está en el grupo de Google y que su test cerrado lo usa | Rechazos y reportes públicos |
 | El dev indica que arregló una app pausada | Pausa automática por reportes |
 | El dev informa su resultado en Google Play | Cierre automático al día límite |
-| Cada usuario ve la calificación de los demás | Detección de capturas duplicadas |
-| Una instalación aprobada desbloquea la siguiente app sin esperar la permanencia | Calificación mínima y bloqueo por permanencia fallida |
+| Cada usuario decide si confía en otro según su calificación | Detección de capturas duplicadas |
+| Una instalación aprobada desbloquea la siguiente app sin esperar la permanencia | Bloqueo por permanencia fallida |
 
 ## Flujo y estados de una app
 
@@ -296,7 +295,7 @@ Los rechazos y los reportes son públicos, para que cada usuario pueda juzgar a 
 
 ## Compromisos, desbloqueo y calificación
 
-Cumplir los compromisos, como dev y como postulante, desbloquea la siguiente app y define la calificación visible de cada usuario.
+Cumplir los compromisos como postulante desbloquea la siguiente app. Todos los compromisos, como dev y como postulante, definen la calificación visible de cada usuario.
 
 ### Compromisos
 
@@ -310,7 +309,7 @@ Cumplir los compromisos, como dev y como postulante, desbloquea la siguiente app
 ### Cadena de desbloqueo
 
 - La primera app no requiere compromisos previos. Así se alimenta la plataforma.
-- Desde la segunda, el usuario sube su siguiente app al cumplir las cuatro condiciones de la regla base.
+- Desde la segunda, el usuario sube su siguiente app al cumplir las tres condiciones de la regla base.
 - Postularse es obligatorio: el compromiso se cumple con la primera instalación aprobada en la app de otro desde que el usuario subió su app anterior.
 - La instalación aprobada desbloquea la siguiente app sin esperar los 14 días. La permanencia de esa postulación queda pendiente y no bloquea mientras no venza, aunque venza después de que la app del usuario se finalice.
 - Si una permanencia se rechaza o no se entrega a tiempo, el usuario no puede subir otra app hasta postularse a otra app y que le aprueben esa permanencia.
@@ -337,7 +336,7 @@ La calificación se calcula con métricas objetivas, no con estrellas: nadie cal
 - **Visible:** la calificación general aparece en la cola y en las postulaciones; el perfil muestra el detalle por tipo de compromiso.
 - **Cuentas nuevas:** muestran la insignia "Nuevo" en lugar de un número hasta completar 3 compromisos.
 - El dev ve la calificación de quienes se postulan, pero la app avanza igual al llegar a su mínimo de postulantes.
-- **Mínima para subir otra app:** desde la segunda app, el usuario necesita una calificación igual o mayor a la mínima. Si está por debajo, la mejora cumpliendo sus compromisos.
+- **No bloquea:** la calificación es informativa. Cada usuario decide si confía en un postulante o en un dev según su calificación. Una calificación mínima para subir otra app queda fuera del MVP (ver Pendientes).
 
 ## Planes, pagos y reembolsos
 
@@ -384,7 +383,7 @@ La plataforma avisa en cada etapa del proceso, por email y con notificaciones we
 | Pasa a Abandonada | Dev | "Tu app quedó abandonada: no se arregló a tiempo" |
 | Pasa a Ignorada | Dev | "Tu app no consiguió su mínimo de postulantes y quedó ignorada" |
 | Pasa a Ignorada o Abandonada | Postulantes | "Tu instalación cuenta para tu siguiente app; no tienes permanencia pendiente" |
-| Siguiente app desbloqueada | Usuario | "Cumpliste tus compromisos: ya puedes subir tu siguiente app" |
+| Siguiente app desbloqueada | Usuario | "Ya puedes subir tu siguiente app" |
 
 ## Parámetros configurables
 
@@ -443,7 +442,6 @@ Casi todas las reglas dependen de un parámetro. El valor inicial es el número 
 | Valor neutral del promedio suavizado | % | 50–100 | 80 |
 | Peso del valor neutral | Compromisos equivalentes | 1–10 | 3 |
 | Vida media de lo reciente | Días | 30–365 | 90 |
-| Calificación mínima para subir otra app | % | Desde 0 hasta el valor neutral del promedio suavizado | Por definir |
 
 Los cuatro pesos deben sumar 100.
 
@@ -471,8 +469,10 @@ El MVP acepta varios riesgos a cambio de simplicidad y de no castigar a usuarios
 | Riesgo | Por qué se asume | Mitigación |
 | --- | --- | --- |
 | La primera app libre atrae apps de usuarios que nunca prueban otras | Sin ella la plataforma no arranca | Instalaciones requeridas para el top (parámetro); package name único |
-| Postulantes que no entregan la permanencia | El castigo solo alcanza a quien quiere subir otra app | Calificación visible; la permanencia fallida bloquea la siguiente app y baja la calificación por debajo de la mínima |
-| Una instalación aprobada desbloquea la siguiente app antes de la permanencia | Esperar 14 días por cada app aleja a los devs con varias apps por subir | La permanencia fallida bloquea la siguiente app; calificación mínima para subir otra app |
+| Postulantes que no entregan la permanencia | El castigo solo alcanza a quien quiere subir otra app | Calificación visible; la permanencia fallida bloquea la siguiente app hasta que cumpla otra |
+| Una instalación aprobada desbloquea la siguiente app antes de la permanencia | Esperar 14 días por cada app aleja a los devs con varias apps por subir | La permanencia fallida bloquea la siguiente app; calificación visible |
+| Devs que no validan ni cierran y siguen subiendo apps | La calificación no bloquea en el MVP, y el incumplimiento perjudica sobre todo al propio dev | Aprobación automática, cierre automático y calificación visible para los postulantes |
+| Postulantes que envían capturas malas en muchas apps | Una sola instalación aprobada desbloquea la siguiente app | Detección de duplicados, rechazos públicos y calificación visible para los devs |
 | Capturas falsas aprobadas automáticamente | Es mejor que castigar al postulante por la demora del dev; además el dev es el primer perjudicado | Detección de duplicados y recordatorio al dev |
 | Rechazos injustos del dev; un rechazo de permanencia también bloquea la siguiente app del postulante | No hay moderación ni apelación en el MVP | Justificación escrita obligatoria; el rechazo se basa en la captura, no en la calificación; los rechazos son públicos en la app y en el perfil del dev |
 | Reportes falsos o malintencionados | Cualquiera puede reportar y no hay apelación en el MVP | Mínimo de 3 cuentas distintas y más del 50%; los reportes son públicos |
@@ -524,6 +524,7 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 
 ### Fuera del MVP
 
+- Calificación mínima para subir otra app: se define con datos reales del lanzamiento. En el MVP la calificación es informativa y no bloquea.
 - Apps simultáneas por dev, respetando la cadena de compromisos. Punto de partida: permitir una app nueva si el usuario no tiene compromisos vencidos y hizo X instalaciones nuevas desde la última app.
 - Grupos de Google propios del dev, como función activable.
 - Extensión pagada del tiempo en el top: hoy va en contra de agilizar la cola. Si se retoma, se define entonces.
