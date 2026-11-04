@@ -59,6 +59,7 @@ El MVP busca que cada app consiga los testers comprometidos de su plan sin que l
 | --- | --- | --- |
 | La cola crece semana a semana | Entran más apps de las que salen | Subir las instalaciones requeridas para llegar al top |
 | Las apps del top se llenan en minutos y los testers no encuentran dónde postularse | Hay más testers que apps disponibles | Ampliar el top |
+| Los testers prefieren unirse a apps En progreso y las del top tardan más en llenarse | La ventana para postulantes adicionales le quita testers al top | Reducir la ventana para postulantes adicionales |
 
 ### Incluido en el MVP
 
