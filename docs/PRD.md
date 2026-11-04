@@ -138,7 +138,7 @@ Si vence el tiempo en el top, la app vuelve a la cola con sus postulantes; si la
 
 ### Cola visible y estados internos
 
-La cola se muestra en tres partes: el top, las apps En progreso y las apps en espera. Las apps En prueba dejan de mostrarse en la cola; el dev y sus postulantes las siguen viendo en sus apps y en sus pruebas.
+La cola se muestra en tres partes: el top, las apps En progreso que siguen en su ventana de 12 h para postulantes adicionales y las apps en espera. Una app En progreso deja de mostrarse al cerrarse esa ventana, aunque el dev siga validando. Las apps Insuficiente vuelven a la cola y se muestran con las apps en espera, nunca en el top ni en En progreso. Las apps En prueba, Pausada, Abandonada y Finalizada no se muestran en la cola; el dev y sus postulantes las siguen viendo en sus apps y en sus pruebas.
 
 Cada parte puede agrupar varios estados internos. Por ejemplo, las apps que vuelven a la cola tras vencer su tiempo en el top, o tras quedar por debajo del mínimo, se muestran con las apps en espera aunque internamente tengan otro estado. Estos estados están por definir (ver Pendientes).
 

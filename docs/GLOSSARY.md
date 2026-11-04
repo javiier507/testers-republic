@@ -11,7 +11,7 @@ The UI never uses "application"; the software is always an **app**.
 | App | App | "Submit app", "Your app" |
 | Postulante | Tester | "Open for testers", "Open spots still take testers" |
 | Postularse / postulación | Join test | Button on each app that accepts testers |
-| Postulación ya enviada | Testing | Tag that replaces "Join test" on apps the user already joined; navbar item |
+| Postulación ya enviada | Testing | Navbar item listing the apps the user joined; not shown as a tag in the queue |
 | Captura de instalación | Install screenshot | "Install, send your install screenshot" |
 | Subir una app | Submit app | Navbar button |
 
@@ -24,11 +24,12 @@ The UI never uses "application"; the software is always an **app**.
 | Lugar en el top | Slot | "#6 takes the next free slot" |
 | Posición | Position | "14 positions to the top · we'll notify you at 3" |
 | En cola (state) | Waiting | Section with the next 20 apps in order of arrival |
-| En progreso (state) | In progress | "Left the top with their minimum — 14-day test running" |
+| En progreso (state) | In progress | "Reached their minimum — extra testers can join for 12 h while the dev reviews screenshots" |
+| Ventana para postulantes adicionales | h left | "8 h left · 5 spots" on In progress apps |
 | En prueba (state) | Running | Minimum of install screenshots approved; 14-day test running, no one else can join. Not shown in the queue, only in "My apps" and "Testing" |
 | Mínimo de postulantes | Minimum | "9/12 · 3 to minimum" |
 | Lugares hasta el máximo de postulantes | Spots / Full | "5 spots"; "Full" when the maximum is reached |
-| Día del test | Day | "Day 9", "14-day test" |
+| Día del test | Day | Not shown in the queue: the 14-day test starts in Running, which the queue hides |
 
 ## Commitments and rating
 
