@@ -202,7 +202,7 @@ Cada app guarda el historial de sus transiciones: estado de origen, estado de de
 
 ## Reglas de operación
 
-Cada dev tiene una sola app activa a la vez, que avanza por orden de llegada y sale del top al conseguir el mínimo de postulantes de su plan: 12 en el gratuito, 15 en el de pago.
+Cada dev tiene una sola app activa a la vez, que avanza según su turno en la cola y sale del top al conseguir el mínimo de postulantes de su plan: 12 en el gratuito, 15 en el de pago.
 
 ### Subida de una app
 
@@ -220,7 +220,7 @@ Cada dev tiene una sola app activa a la vez, que avanza por orden de llegada y s
 
 - La cola se ordena por grupos y, dentro de cada grupo, por fecha de entrada (ver Cola visible y estados internos). Se muestran las 20 próximas apps y la calificación de cada dev.
 - Hay 5 apps en el top. Para entrar, la app necesita su turno y que el dev tenga las instalaciones aprobadas requeridas, contadas desde que subió su app anterior (0 en el lanzamiento). Las instalaciones solo se exigen la primera vez que la app entra al top.
-- Tiempo en el top: 72 h en el lanzamiento, luego 24 h. Si se acaba antes de recibir el mínimo de postulaciones, la app pasa a Vencida y vuelve a la cola (ver Reencolamiento).
+- Tiempo en el top: 72 h en el lanzamiento, luego 24 h. Si se acaba antes de recibir el mínimo de postulaciones, la app pasa a Vencida y vuelve a la cola; si le pasa por segunda vez, pasa a Ignorada (ver Reencolamiento).
 - Al recibir el mínimo de postulaciones de su plan (12 gratis, 15 de pago), la app pasa a En progreso y libera su lugar.
 - En progreso dura como máximo 24 h. Durante sus primeras 12 h acepta postulantes adicionales hasta el máximo de su plan (15 gratis, 20 de pago); las capturas de los adicionales también cuentan para completar el mínimo.
 - En cuanto las capturas aprobadas llegan al mínimo, por el dev o por aprobación automática, la app pasa a En prueba y deja de mostrarse en la cola, aunque no hayan pasado las 12 h.
@@ -248,7 +248,7 @@ Una app reencolada vuelve a Waiting, conserva lo que ya consiguió y, al volver 
 - Cada tipo de reencolada tiene su propio contador de regresos.
 - Al volver a llegar a su mínimo, la reencolada pasa otra vez por En progreso con las mismas reglas: 24 h en total y 12 h para postulantes adicionales.
 - Una app Arreglada vuelve con el conteo de reportes para pausar en cero. Los reportes anteriores siguen siendo públicos y quedan en su historial.
-- Los tiempos y los límites son parámetros (ver Parámetros configurables).
+- Los tiempos y los límites de Insuficiente y Arreglada son parámetros (ver Parámetros configurables). El regreso único de Vencida es fijo.
 
 ### Postulaciones y capturas
 
@@ -282,7 +282,7 @@ Una app reencolada vuelve a Waiting, conserva lo que ya consiguió y, al volver 
 | 6 | 5 | 55% | Sí |
 
 - Cuando el dev indica que la arregló, la app pasa a Arreglada y vuelve a la cola con sus postulantes, sin verificación automática (ver Reencolamiento).
-- Si no la arregla en 7 días, pasa a Abandonada: el dev pierde el desbloqueo usado y su calificación baja.
+- Si no la arregla en 7 días, o si se pausa otra vez después de agotar sus regresos como Arreglada, pasa a Abandonada: el dev pierde el desbloqueo usado y su calificación baja.
 - Los reportes no se pueden apelar en el MVP.
 
 ### Transparencia de rechazos y reportes
@@ -382,7 +382,7 @@ La plataforma avisa en cada etapa del proceso, por email y con notificaciones we
 | App pausada por reportes | Dev | "Tu app se pausó: varios usuarios no pueden abrirla" |
 | Pasa a Abandonada | Dev | "Tu app quedó abandonada: no se arregló a tiempo" |
 | Pasa a Ignorada | Dev | "Tu app no consiguió su mínimo de postulantes y quedó ignorada" |
-| Pasa a Ignorada | Postulantes | "Tu instalación cuenta para tu siguiente app; no tienes permanencia pendiente" |
+| Pasa a Ignorada o Abandonada | Postulantes | "Tu instalación cuenta para tu siguiente app; no tienes permanencia pendiente" |
 | Siguiente app desbloqueada | Usuario | "Cumpliste tus compromisos: ya puedes subir tu siguiente app" |
 
 ## Parámetros configurables
