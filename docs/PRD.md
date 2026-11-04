@@ -127,7 +127,7 @@ Si vence el tiempo en el top, la app vuelve a la cola con sus postulantes; si la
 
 | Estado | Qué pasa |
 | --- | --- |
-| En cola | Espera su turno por antigüedad; aparece en la lista si está entre las 20 próximas |
+| En espera | Aguarda su turno por antigüedad; aparece en la cola si está entre las 20 próximas |
 | En el top | Recibe postulaciones durante su tiempo límite y puede ser reportada |
 | En progreso | Recibió el mínimo de capturas de su plan (12 o 15). Dura como máximo 24 h: el dev valida las capturas y, durante las primeras 12 h, acepta postulantes adicionales hasta el máximo (15 o 20) |
 | Insuficiente | Terminó la ventana de postulantes adicionales, no quedan capturas pendientes y las aprobadas no llegan al mínimo; su regreso a la cola está por definir |
@@ -139,7 +139,7 @@ Si vence el tiempo en el top, la app vuelve a la cola con sus postulantes; si la
 
 ### Cola visible y estados internos
 
-La cola se muestra en tres partes: el top, las apps En progreso que siguen en su ventana de 12 h para postulantes adicionales y las apps en espera. Una app En progreso deja de mostrarse al cerrarse esa ventana, aunque el dev siga validando. Las apps Insuficiente vuelven a la cola y se muestran con las apps en espera, nunca en el top ni en En progreso. Las apps En prueba, Pausada, Abandonada y Finalizada no se muestran en la cola; el dev y sus postulantes las siguen viendo en sus apps y en sus pruebas.
+La cola se muestra en tres partes: el top, las apps En progreso que siguen en su ventana de 12 h para postulantes adicionales y las apps en espera, que en la UI se llaman Waiting. Una app En progreso deja de mostrarse al cerrarse esa ventana, aunque el dev siga validando. Las apps Insuficiente vuelven a la cola y se muestran con las apps en espera, nunca en el top ni en En progreso. Las apps En prueba, Pausada, Abandonada y Finalizada no se muestran en la cola; el dev y sus postulantes las siguen viendo en sus apps y en sus pruebas.
 
 Cada parte puede agrupar varios estados internos. Por ejemplo, las apps que vuelven a la cola tras vencer su tiempo en el top, o tras quedar por debajo del mínimo, se muestran con las apps en espera aunque internamente tengan otro estado. Estos estados están por definir (ver Pendientes).
 
@@ -435,7 +435,6 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
   - Tiempo en el top vencido: vuelve a la cola de espera normal.
   - Insuficiente (ya definido cuándo ocurre; falta su regreso): se encola justo después del top, se muestra con las apps en espera y, al volver al top, su tiempo ahí es mucho menor.
   - Pausada y arreglada: su posición "cerca del top".
-- [ ] **Nombre de la parte en espera de la cola:** buscar un término mejor para las apps que no están en el top ni En progreso (hoy en la UI: "Waiting").
 - [ ] **Panel de administración:** alcance y funciones (parámetros, incidencias, reembolsos).
 
 ### Por decidir cerca del lanzamiento
