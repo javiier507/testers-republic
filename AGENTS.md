@@ -16,6 +16,7 @@ English is the official language of this repository. Everything in it must be wr
 ### Docs
 
 - Documents in `docs/` are useful context but not an absolute source of truth — they can become outdated over time. When in doubt, verify against the current code rather than trusting a doc at face value.
+- Use [`docs/GLOSSARY.md`](./docs/GLOSSARY.md) to translate PRD terms into their English UI equivalents.
 
 ### TanStack Start documentation
 
