@@ -28,10 +28,10 @@ Toda función, gratuita o de pago, actual o futura, debe respetar la cadena de r
 La primera app no exige nada. Desde la segunda, para subir la siguiente app el usuario necesita:
 
 1. Que su app anterior ya no esté activa: Finalizada, Abandonada o Ignorada.
-2. Al menos una instalación aprobada en la app de otro desde que subió su app anterior.
+2. Las instalaciones aprobadas requeridas en apps de otros (3 en el lanzamiento) desde que subió su app anterior.
 3. Que su última permanencia no haya sido rechazada ni haya quedado sin entregar.
 
-Un compromiso que todavía no vence no bloquea: una permanencia pendiente no impide subir la siguiente app. Los compromisos como dev (validar y cerrar) tampoco bloquean: se resuelven solos al vencer, con la aprobación automática y el cierre de la plataforma, y bajan la calificación, que es visible para todos.
+Un compromiso que todavía no vence no bloquea: una permanencia pendiente no impide subir la siguiente app. Una instalación pendiente, en cambio, todavía no cuenta para el desbloqueo: cuenta recién cuando se aprueba. Los compromisos como dev (validar y cerrar) tampoco bloquean: se resuelven solos al vencer, con la aprobación automática y el cierre de la plataforma, y bajan la calificación, que es visible para todos.
 
 Es la regla sobre la que se sostiene la plataforma. Si una función permite saltarse una condición de la regla base, o evitar un compromiso sin que baje la calificación, se rediseña o no se incluye.
 
@@ -64,7 +64,7 @@ El MVP busca que cada app consiga los testers comprometidos de su plan sin que l
 
 | Señal | Qué indica | Ajuste |
 | --- | --- | --- |
-| La cola crece semana a semana | Entran más apps de las que salen | Subir las instalaciones requeridas para llegar al top |
+| La cola crece semana a semana | Entran más apps de las que salen | Subir las instalaciones requeridas para subir la siguiente app. El efecto se ve en el siguiente ciclo de cada usuario, unas 3 semanas después, así que conviene ajustarlo con tiempo |
 | Las apps del top se llenan en minutos y los testers no encuentran dónde postularse | Hay más testers que apps disponibles | Ampliar el top |
 | Los testers prefieren unirse a apps En progreso y las del top tardan más en llenarse | La ventana para postulantes adicionales le quita testers al top | Reducir la ventana para postulantes adicionales |
 
@@ -116,15 +116,15 @@ La plataforma equilibra dos sistemas para que la cola avance. **Confianza** es l
 
 | Confianza | Contención |
 | --- | --- |
-| La primera app entra sin requisitos | Compromisos como postulante para desbloquear la siguiente app |
+| La primera app entra sin requisitos | Instalaciones aprobadas requeridas para subir la siguiente app |
 | El dev valida las capturas | Aprobación automática al vencer el plazo |
-| El postulante elige a qué apps postularse | Instalaciones requeridas para llegar al top |
+| El postulante elige a qué apps postularse | El top limita cuántas apps compiten por testers al mismo tiempo |
 | El dev declara que su app está disponible en todos los países | Tiempo límite en el top |
 | El dev confirma que está en el grupo de Google y que su test cerrado lo usa | Rechazos y reportes públicos |
 | El dev indica que arregló una app pausada | Pausa automática por reportes |
 | El dev informa su resultado en Google Play | Cierre automático al día límite |
 | Cada usuario decide si confía en otro según su calificación | Detección de capturas duplicadas |
-| Una instalación aprobada desbloquea la siguiente app sin esperar la permanencia | Bloqueo por permanencia fallida |
+| Las instalaciones aprobadas desbloquean la siguiente app sin esperar las permanencias | Bloqueo por permanencia fallida |
 
 ## Flujo y estados de una app
 
@@ -218,7 +218,7 @@ Cada dev tiene una sola app activa a la vez, que avanza según su turno en la co
 ### Cola y top
 
 - La cola se ordena por grupos y, dentro de cada grupo, por fecha de entrada (ver Cola visible y estados internos). Se muestran las 20 próximas apps y la calificación de cada dev.
-- Hay 5 apps en el top. Para entrar, la app necesita su turno y que el dev tenga las instalaciones aprobadas requeridas, contadas desde que subió su app anterior (0 en el lanzamiento). Las instalaciones solo se exigen la primera vez que la app entra al top.
+- Hay 5 apps en el top. Una app entra al top cuando le toca su turno.
 - Tiempo en el top: 72 h en el lanzamiento, luego 24 h. Si se acaba antes de recibir el mínimo de postulaciones, la app pasa a Vencida y vuelve a la cola; si le pasa por segunda vez, pasa a Ignorada (ver Reencolamiento).
 - Cada app tiene su propio tiempo límite: se calcula al entrar al top, con el valor vigente del parámetro que le corresponde (el normal o el de su tipo de reencolada). Si un parámetro cambia, solo afecta a las apps que entren al top después; las que ya están conservan su tiempo límite.
 - Al recibir el mínimo de postulaciones de su plan (12 gratis, 15 de pago), la app pasa a En progreso y libera su lugar.
@@ -253,8 +253,17 @@ Una app reencolada vuelve a Waiting, conserva lo que ya consiguió y, al volver 
 ### Postulaciones y capturas
 
 - Postularse es enviar la captura de instalación. No hay límite de postulaciones simultáneas.
-- La instalación cuenta para el postulante al enviarla; si el dev la rechaza, se descuenta. Una captura rechazada no se puede reenviar: el rechazo es definitivo y no se puede apelar.
 - Toda captura, de instalación o de permanencia, empieza como pendiente y pasa a aprobada o rechazada.
+- Una captura rechazada no se puede reenviar: el rechazo es definitivo y no se puede apelar.
+
+Una captura de instalación cuenta distinto para la app del dev y para el postulante, según su estado:
+
+| Captura de instalación | Para la app del dev | Para el postulante |
+| --- | --- | --- |
+| Enviada (pendiente) | Cuenta para el mínimo de postulaciones que la saca del top | Todavía no cuenta |
+| Aprobada | Cuenta para el mínimo de aprobadas que la lleva a En prueba | Cuenta para desbloquear su siguiente app y para su calificación |
+| Rechazada | Deja de contar para En prueba | No desbloquea y baja su calificación |
+
 - El dev valida todas las postulaciones que recibe, hasta el máximo de su plan. Tiene 24 h por captura y recibe un recordatorio 6 h antes de que se aprueben solas. En En progreso el límite es único: todas las capturas pendientes se aprueban solas como tarde a las 24 h de que la app entró en ese estado, incluidas las de los postulantes adicionales. La demora del dev nunca castiga al postulante.
 - Un rechazo requiere una justificación escrita de 30 a 280 caracteres y se basa en la captura, nunca en la calificación del postulante.
 - La plataforma bloquea capturas duplicadas o casi idénticas antes de que lleguen al dev.
@@ -301,7 +310,7 @@ Cumplir los compromisos como postulante desbloquea la siguiente app. Todos los c
 
 | Rol | Compromiso | Plazo | Si no cumple |
 | --- | --- | --- | --- |
-| Postulante | Postularse: una captura de instalación aprobada en la app de otro | Desde que subió su app anterior, antes de subir la siguiente | Bloquea su siguiente app |
+| Postulante | Postularse: las capturas de instalación aprobadas requeridas en apps de otros (3 en el lanzamiento) | Desde que subió su app anterior, antes de subir la siguiente | Bloquea su siguiente app |
 | Postulante | Captura de permanencia | Día 14, con 2 días de margen | Si no la entrega o se la rechazan, baja su calificación y bloquea su siguiente app hasta que cumpla una permanencia en otra app |
 | Dev | Validar las capturas recibidas (instalación y permanencia) | 24 h por captura; en En progreso, como tarde 24 h desde que la app entró en ese estado | Se aprueban solas y baja su calificación |
 | Dev | Cerrar la app | Día 20 | La plataforma la cierra y baja su calificación |
@@ -310,14 +319,15 @@ Cumplir los compromisos como postulante desbloquea la siguiente app. Todos los c
 
 - La primera app no requiere compromisos previos. Así se alimenta la plataforma.
 - Desde la segunda, el usuario sube su siguiente app al cumplir las tres condiciones de la regla base.
-- Postularse es obligatorio: el compromiso se cumple con la primera instalación aprobada en la app de otro desde que el usuario subió su app anterior.
-- La instalación aprobada desbloquea la siguiente app sin esperar los 14 días. La permanencia de esa postulación queda pendiente y no bloquea mientras no venza, aunque venza después de que la app del usuario se finalice.
+- Postularse es obligatorio: el compromiso se cumple al reunir las instalaciones aprobadas requeridas en apps de otros desde que el usuario subió su app anterior. Las capturas pendientes no cuentan hasta que se aprueban.
+- Las instalaciones requeridas se exigen desde la segunda app, en cada ciclo: 3 para la segunda, otras 3 para la tercera, y así. Son un parámetro por plan: para la segunda app rige el valor de las apps gratuitas y, desde la tercera, el de las apps de pago. Ambos empiezan en 3 y nunca bajan de 1, que es el mínimo de la regla base.
+- El número de instalaciones requeridas queda fijado al subir la app anterior. Si el parámetro cambia, no afecta a los usuarios que ya están en curso: el nuevo valor les aplica desde la siguiente app que suban.
+- Las instalaciones aprobadas desbloquean la siguiente app sin esperar los 14 días. Las permanencias de esas postulaciones quedan pendientes y no bloquean mientras no venzan, aunque venzan después de que la app del usuario se finalice.
 - Si una permanencia se rechaza o no se entrega a tiempo, el usuario no puede subir otra app hasta postularse a otra app y que le aprueben esa permanencia.
 - La cadena aplica igual en el plan de pago: pagar quita el límite de cantidad, no los compromisos.
 - Si una app termina Abandonada, el desbloqueo usado para subirla se pierde, la app cuenta igual dentro del total de apps del dev, incluidas las 2 gratuitas, y su calificación baja como si no hubiera cerrado la app a tiempo.
 - Si una app termina Ignorada, el dev queda libre para su siguiente app y su calificación no baja: la falta de interés no es un compromiso incumplido. La app cuenta igual dentro de su total de apps.
 - Si la app a la que se postuló termina Ignorada o Abandonada, el postulante no tiene permanencia pendiente, porque los 14 días nunca empezaron. Su instalación aprobada cuenta igual para su siguiente app.
-- Por definir: cuántas postulaciones se exigen por ciclo (ver Pendientes).
 
 ### Calificación
 
@@ -326,11 +336,12 @@ La calificación se calcula con métricas objetivas, no con estrellas: nadie cal
 | Rol | Métrica | Peso |
 | --- | --- | --- |
 | Postulante | Permanencias entregadas a tiempo y aprobadas | 40% |
-| Postulante | Instalaciones aprobadas (no rechazadas) | 20% |
+| Postulante | Instalaciones aprobadas | 20% |
 | Dev | Capturas validadas a tiempo | 20% |
 | Dev | App cerrada a tiempo | 20% |
 
 - La permanencia pesa más porque decide si el dev cumple el requisito de Google.
+- **Capturas pendientes:** no afectan la calificación hasta que se aprueban o se rechazan.
 - **App Abandonada:** cuenta como app no cerrada a tiempo, porque el dev no cumplió con mantenerla funcionando. Una app Ignorada no cuenta en esa métrica: la falta de interés no es un compromiso incumplido.
 - **Promedio suavizado:** cada usuario arranca como si tuviera 3 compromisos al 80%, para que un primer fallo no lo hunda.
 - **Lo reciente pesa más:** un compromiso de hace 90 días pesa la mitad que uno de hoy.
@@ -406,7 +417,6 @@ Casi todas las reglas dependen de un parámetro. El valor inicial es el número 
 | Tiempo en el top al volver como Vencida | Horas | 1–24 | 12 |
 | Regresos a la cola como Insuficiente | Número | 0–5 | 2 |
 | Regresos a la cola como Arreglada | Número | 0–5 | 2 |
-| Instalaciones aprobadas requeridas para llegar al top por primera vez, desde la app anterior | Número | 0–15 | 0 |
 | Ventana para postulantes adicionales | Horas desde que la app entra En progreso | Menor que el plazo del dev para validar | 12 |
 | Al vencer el tiempo en el top | Opción | Volver a la cola conservando postulantes · Volver a la cola sin postulantes | Conservando postulantes |
 
@@ -458,6 +468,8 @@ Los cuatro pesos deben sumar 100.
 | Parámetro | Tipo | Valores aceptados | Inicial |
 | --- | --- | --- | --- |
 | Apps gratuitas en total | Número | 1–10 | 2 |
+| Instalaciones aprobadas requeridas para subir una app gratuita, desde la app anterior | Número | 1–15 | 3 |
+| Instalaciones aprobadas requeridas para subir una app de pago, desde la app anterior | Número | 1–15 | 3 |
 | Apps activas a la vez por dev | Número | Fijo en 1 durante el MVP | 1 |
 | Grupos de Google | Opción | Solo el de la plataforma · Plataforma y propios | Solo el de la plataforma |
 
@@ -469,11 +481,11 @@ El MVP acepta varios riesgos a cambio de simplicidad y de no castigar a usuarios
 
 | Riesgo | Por qué se asume | Mitigación |
 | --- | --- | --- |
-| La primera app libre atrae apps de usuarios que nunca prueban otras | Sin ella la plataforma no arranca | Instalaciones requeridas para el top (parámetro); package name único |
+| La primera app libre atrae apps de usuarios que nunca prueban otras | Sin ella la plataforma no arranca | Instalaciones requeridas para subir la segunda app (parámetro); package name único |
 | Postulantes que no entregan la permanencia | El castigo solo alcanza a quien quiere subir otra app | Calificación visible; la permanencia fallida bloquea la siguiente app hasta que cumpla otra |
-| Una instalación aprobada desbloquea la siguiente app antes de la permanencia | Esperar 14 días por cada app aleja a los devs con varias apps por subir | La permanencia fallida bloquea la siguiente app; calificación visible |
+| Las instalaciones aprobadas desbloquean la siguiente app antes de las permanencias | Esperar 14 días por cada app aleja a los devs con varias apps por subir | La permanencia fallida bloquea la siguiente app; calificación visible |
 | Devs que no validan ni cierran y siguen subiendo apps | La calificación no bloquea en el MVP, y el incumplimiento perjudica sobre todo al propio dev | Aprobación automática, cierre automático y calificación visible para los postulantes |
-| Postulantes que envían capturas malas en muchas apps | Una sola instalación aprobada desbloquea la siguiente app | Detección de duplicados, rechazos públicos y calificación visible para los devs |
+| Postulantes que envían capturas malas en muchas apps | Pocas instalaciones aprobadas (3 en el lanzamiento) desbloquean la siguiente app | Detección de duplicados, rechazos públicos y calificación visible para los devs |
 | Capturas falsas aprobadas automáticamente | Es mejor que castigar al postulante por la demora del dev; además el dev es el primer perjudicado | Detección de duplicados y recordatorio al dev |
 | Rechazos injustos del dev; un rechazo de permanencia también bloquea la siguiente app del postulante | No hay moderación ni apelación en el MVP | Justificación escrita obligatoria; el rechazo se basa en la captura, no en la calificación; los rechazos son públicos en la app y en el perfil del dev |
 | Reportes falsos o malintencionados | Cualquiera puede reportar y no hay apelación en el MVP | Mínimo de 3 cuentas distintas y más del 50%; los reportes son públicos |
@@ -509,7 +521,9 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 
 ### Por decidir dentro del MVP
 
-- [ ] **Postulaciones por ciclo:** hoy basta una instalación aprobada en la app de otro, desde la app anterior, para desbloquear la siguiente. ¿Se exigen más? Si se exigen, entra como parámetro.
+- [ ] **Desbloqueo tras una permanencia fallida:** con varias instalaciones por ciclo, el usuario tiene varias permanencias en curso, cada una con su propia fecha. La regla base pide que "su última permanencia" no haya fallado, pero Compromisos dice que debe "postularse a otra app y que le aprueben esa permanencia". Ejemplo: falla su permanencia en la app X el día 15 y le aprueban la de la app Y, que ya estaba en curso, el día 16. ¿Queda desbloqueado?
+  - **A.** Sí: alcanza una permanencia aprobada después de la falla, aunque ya estuviera en curso. El resultado depende del orden de las fechas.
+  - **B.** No: tiene que postularse a una app nueva y cumplir esa permanencia. Fallar siempre cuesta lo mismo y coincide con el texto de Compromisos.
 - [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de las apps).
 
 ### Por decidir cerca del lanzamiento
