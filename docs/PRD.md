@@ -121,8 +121,6 @@ La plataforma equilibra dos sistemas para que la cola avance. **Confianza** es l
 
 Una app avanza en línea recta de la cola al cierre, salvo cuando vence su tiempo en el top o recibe suficientes reportes.
 
-&#91;embedded content: estados de una app · 7 estados\]
-
 Si vence el tiempo en el top, la app vuelve a la cola con sus postulantes; si la pausan y el dev la arregla, regresa cerca del top. La posición exacta en ambos casos está por definir (ver Pendientes).
 
 | Estado | Qué pasa |
