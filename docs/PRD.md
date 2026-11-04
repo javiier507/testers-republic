@@ -509,6 +509,7 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 
 - [ ] **Postulaciones por ciclo:** hoy basta una instalación aprobada en la app de otro, desde la app anterior, para desbloquear la siguiente. ¿Se exigen más? Si se exigen, entra como parámetro.
 - [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de las apps).
+- [ ] **Métrica de una app Abandonada:** el PRD dice que una app Abandonada baja la calificación del dev, pero ninguna de las cuatro métricas de calificación habla de abandono. Propuesta: contarla como app no cerrada a tiempo. Una app Ignorada no cuenta en esa métrica, porque no baja la calificación.
 
 ### Por decidir cerca del lanzamiento
 
