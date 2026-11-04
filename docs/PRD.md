@@ -314,7 +314,7 @@ Cumplir los compromisos como postulante desbloquea la siguiente app. Todos los c
 - La instalación aprobada desbloquea la siguiente app sin esperar los 14 días. La permanencia de esa postulación queda pendiente y no bloquea mientras no venza, aunque venza después de que la app del usuario se finalice.
 - Si una permanencia se rechaza o no se entrega a tiempo, el usuario no puede subir otra app hasta postularse a otra app y que le aprueben esa permanencia.
 - La cadena aplica igual en el plan de pago: pagar quita el límite de cantidad, no los compromisos.
-- Si una app termina Abandonada, el desbloqueo usado para subirla se pierde y la app cuenta igual dentro del total de apps del dev, incluidas las 2 gratuitas.
+- Si una app termina Abandonada, el desbloqueo usado para subirla se pierde, la app cuenta igual dentro del total de apps del dev, incluidas las 2 gratuitas, y su calificación baja como si no hubiera cerrado la app a tiempo.
 - Si una app termina Ignorada, el dev queda libre para su siguiente app y su calificación no baja: la falta de interés no es un compromiso incumplido. La app cuenta igual dentro de su total de apps.
 - Si la app a la que se postuló termina Ignorada o Abandonada, el postulante no tiene permanencia pendiente, porque los 14 días nunca empezaron. Su instalación aprobada cuenta igual para su siguiente app.
 - Por definir: cuántas postulaciones se exigen por ciclo (ver Pendientes).
@@ -331,6 +331,7 @@ La calificación se calcula con métricas objetivas, no con estrellas: nadie cal
 | Dev | App cerrada a tiempo | 20% |
 
 - La permanencia pesa más porque decide si el dev cumple el requisito de Google.
+- **App Abandonada:** cuenta como app no cerrada a tiempo, porque el dev no cumplió con mantenerla funcionando. Una app Ignorada no cuenta en esa métrica: la falta de interés no es un compromiso incumplido.
 - **Promedio suavizado:** cada usuario arranca como si tuviera 3 compromisos al 80%, para que un primer fallo no lo hunda.
 - **Lo reciente pesa más:** un compromiso de hace 90 días pesa la mitad que uno de hoy.
 - **Visible:** la calificación general aparece en la cola y en las postulaciones; el perfil muestra el detalle por tipo de compromiso.
@@ -510,7 +511,6 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 
 - [ ] **Postulaciones por ciclo:** hoy basta una instalación aprobada en la app de otro, desde la app anterior, para desbloquear la siguiente. ¿Se exigen más? Si se exigen, entra como parámetro.
 - [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de las apps).
-- [ ] **Métrica de una app Abandonada:** el PRD dice que una app Abandonada baja la calificación del dev, pero ninguna de las cuatro métricas de calificación habla de abandono. Propuesta: contarla como app no cerrada a tiempo. Una app Ignorada no cuenta en esa métrica, porque no baja la calificación.
 
 ### Por decidir cerca del lanzamiento
 
