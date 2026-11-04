@@ -415,9 +415,7 @@ El MVP acepta varios riesgos a cambio de simplicidad y de no castigar a usuarios
 
 ### Baja de usuarios
 
-- La baja de usuarios queda fuera del MVP: en el lanzamiento no se pueden eliminar cuentas.
-- Cuando se incluya, un usuario solo podrá darse de baja si no tiene compromisos pendientes, ni como dev ni como postulante.
-- Queda por definir cómo y cuándo se elimina la cuenta (por ejemplo, con una tarea programada) y qué pasa con su historial público (ver Pendientes).
+La baja de usuarios queda fuera del MVP: en el lanzamiento no se pueden eliminar cuentas.
 
 ### Aviso en los términos y en la pantalla de subida
 
