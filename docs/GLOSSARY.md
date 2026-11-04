@@ -25,6 +25,7 @@ The UI never uses "application"; the software is always an **app**.
 | Posición | Position | "14 positions to the top · we'll notify you at 3" |
 | En cola (state) | Waiting | Section with the next 20 apps in order of arrival |
 | En progreso (state) | In progress | "Left the top with their minimum — 14-day test running" |
+| En prueba (state) | Running | Window for extra testers closed; no longer shown in the queue, only in "My apps" and "Testing" |
 | Mínimo de postulantes | Minimum | "9/12 · 3 to minimum" |
 | Lugares hasta el máximo de postulantes | Spots / Full | "5 spots"; "Full" when the maximum is reached |
 | Día del test | Day | "Day 9", "14-day test" |
