@@ -27,7 +27,7 @@ Toda función, gratuita o de pago, actual o futura, debe respetar la cadena de r
 
 La primera app no exige nada. Desde la segunda, para subir la siguiente app el usuario necesita:
 
-1. Que su app anterior ya no esté activa: Finalizada o Abandonada.
+1. Que su app anterior ya no esté activa: Finalizada, Abandonada o Ignorada.
 2. Al menos una instalación aprobada en la app de otro desde que subió su app anterior.
 3. Que su última permanencia no haya sido rechazada ni haya quedado sin entregar.
 4. Una calificación igual o mayor a la mínima.
@@ -49,7 +49,6 @@ Es la regla sobre la que se sostiene la plataforma. Si una función permite salt
 | Función | ¿Respeta la cadena? | Por qué |
 | --- | --- | --- |
 | Apps adicionales, desde la tercera, con más postulantes (mínimo 15, hasta 20) | Sí | Cada app sigue requiriendo los compromisos de la anterior; el margen exige más testers y más validaciones al dev |
-| Extensión del tiempo en el top, una por app | Sí | Da más tiempo para conseguir postulantes; no quita ningún compromiso |
 
 ## Objetivos y alcance del MVP
 
@@ -109,6 +108,7 @@ La plataforma no usa la palabra "aplicación": el software es una **app** y la a
 | Compromiso | Una obligación con plazo: instalar, permanecer, validar o cerrar |
 | Cierre | El dev valida las permanencias e informa cómo le fue en Google Play |
 | Top | Las apps activas que pueden recibir postulaciones |
+| Reencolada | Una app que vuelve a la cola: Insuficiente, Arreglada o Vencida |
 | Package name | El identificador de la app en Google Play, extraído de su link |
 
 ### Principios: confianza y contención
@@ -129,27 +129,76 @@ La plataforma equilibra dos sistemas para que la cola avance. **Confianza** es l
 
 ## Flujo y estados de una app
 
-Una app avanza en línea recta de la cola al cierre, salvo cuando vence su tiempo en el top o recibe suficientes reportes.
-
-Si vence el tiempo en el top, la app vuelve a la cola con sus postulantes; si la pausan y el dev la arregla, regresa cerca del top. La posición exacta en ambos casos está por definir (ver Pendientes).
+Una app avanza en línea recta de la cola al cierre, salvo cuando vence su tiempo en el top, queda Insuficiente o recibe suficientes reportes. En esos casos vuelve a la cola como reencolada, con un límite de veces, o termina Ignorada o Abandonada (ver Reencolamiento).
 
 | Estado | Qué pasa |
 | --- | --- |
-| En espera | Aguarda su turno por antigüedad; aparece en la cola si está entre las 20 próximas |
+| En espera | Aguarda su turno; aparece en la cola si está entre las 20 próximas |
 | En el top | Recibe postulaciones durante su tiempo límite y puede ser reportada |
 | En progreso | Recibió el mínimo de capturas de su plan (12 o 15). Dura como máximo 24 h: el dev valida las capturas y, durante las primeras 12 h, acepta postulantes adicionales hasta el máximo (15 o 20) |
-| Insuficiente | Terminó la ventana de postulantes adicionales, no quedan capturas pendientes y las aprobadas no llegan al mínimo; su regreso a la cola está por definir |
+| Insuficiente | Terminó la ventana de postulantes adicionales, no quedan capturas pendientes y las aprobadas no llegan al mínimo; vuelve a la cola conservando sus aprobadas |
+| Vencida | Se le acabó el tiempo en el top antes de recibir el mínimo de postulaciones; vuelve a la cola con sus postulantes |
+| Arreglada | El dev indicó que arregló su app pausada; vuelve a la cola con sus postulantes |
 | En prueba | Las capturas aprobadas llegaron al mínimo; nadie más puede unirse y corren los 14 días |
 | Por cerrar | Desde el día 14: el dev valida las permanencias y cierra |
 | Finalizada | La cerró el dev o la plataforma al día límite; el dev queda libre para su siguiente app |
-| Pausada | Recibió suficientes reportes; espera que el dev la arregle |
-| Abandonada | No se arregló a tiempo; el dev pierde el desbloqueo usado y la app cuenta dentro de su total de apps |
+| Pausada | Recibió suficientes reportes mientras estaba en el top; espera que el dev la arregle, como máximo 7 días |
+| Abandonada | No se arregló a tiempo, o se pausó otra vez después de agotar sus regresos como Arreglada; el dev pierde el desbloqueo usado, la app cuenta dentro de su total de apps y su calificación baja |
+| Ignorada | Se le acabó el tiempo en el top por segunda vez, o quedó Insuficiente otra vez después de agotar sus regresos; el dev queda libre para su siguiente app, la app cuenta dentro de su total de apps y su calificación no baja |
+
+### Diagrama de estados
+
+```mermaid
+stateDiagram-v2
+    state "En espera" as EnEspera
+    state "En el top" as EnElTop
+    state "En progreso" as EnProgreso
+    state "En prueba" as EnPrueba
+    state "Por cerrar" as PorCerrar
+
+    [*] --> EnEspera: El dev sube la app
+    EnEspera --> EnElTop: Le toca el turno
+    EnElTop --> EnProgreso: Recibe el mínimo de postulaciones
+    EnElTop --> Vencida: Se acaba el tiempo por primera vez
+    EnElTop --> Ignorada: Se acaba el tiempo por segunda vez
+    EnElTop --> Pausada: Reportes
+    EnElTop --> Abandonada: Reportes tras agotar sus regresos como Arreglada
+    EnProgreso --> EnPrueba: Las aprobadas llegan al mínimo
+    EnProgreso --> Insuficiente: Ventana cerrada, sin pendientes y bajo el mínimo
+    EnProgreso --> Ignorada: Insuficiente tras agotar sus regresos
+    Insuficiente --> EnElTop: Le toca el turno
+    Vencida --> EnElTop: Le toca el turno
+    Pausada --> Arreglada: El dev la arregla
+    Pausada --> Abandonada: 7 días sin arreglar
+    Arreglada --> EnElTop: Le toca el turno
+    EnPrueba --> PorCerrar: Día 14
+    PorCerrar --> Finalizada: Cierra el dev o llega el día límite
+    Finalizada --> [*]
+    Abandonada --> [*]
+    Ignorada --> [*]
+```
 
 ### Cola visible y estados internos
 
-La cola se muestra en tres partes: el top, las apps En progreso que siguen en su ventana de 12 h para postulantes adicionales y las apps en espera, que en la UI se llaman Waiting. Una app En progreso deja de mostrarse al cerrarse esa ventana, aunque el dev siga validando. Las apps Insuficiente vuelven a la cola y se muestran con las apps en espera, nunca en el top ni en En progreso. Las apps En prueba, Pausada, Abandonada y Finalizada no se muestran en la cola; el dev y sus postulantes las siguen viendo en sus apps y en sus pruebas.
+La cola se muestra en tres partes, y cada una agrupa uno o más estados internos.
 
-Cada parte puede agrupar varios estados internos. Por ejemplo, las apps que vuelven a la cola tras vencer su tiempo en el top, o tras quedar por debajo del mínimo, se muestran con las apps en espera aunque internamente tengan otro estado. Estos estados están por definir (ver Pendientes).
+| Parte en la UI | Estados que incluye |
+| --- | --- |
+| Top | En el top |
+| In progress | En progreso, solo durante su ventana de 12 h para postulantes adicionales |
+| Waiting | En espera, Insuficiente, Arreglada y Vencida |
+
+- Waiting muestra sus estados juntos, sin diferencia visual entre apps nuevas y reencoladas. Solo cambia el orden: primero las Insuficiente, luego las Arreglada y al final las nuevas y las Vencida, mezcladas.
+- Dentro de cada grupo, las apps se ordenan por fecha de entrada a la cola: la de subida para una app nueva y la de regreso para una reencolada.
+- Una app En progreso deja de mostrarse al cerrarse su ventana de 12 h, aunque el dev siga validando.
+- Las apps En prueba, Por cerrar, Pausada, Finalizada, Abandonada e Ignorada no se muestran en la cola; el dev y sus postulantes las siguen viendo en sus apps y en sus pruebas.
+
+### Historial de estados
+
+Cada app guarda el historial de sus transiciones: estado de origen, estado de destino, fecha y hora, y causa (acción del dev, vencimiento de un plazo, reportes o aprobación automática).
+
+- Lo ven el dev de la app y el panel de administración; no es público.
+- De él salen los conteos de reencolamientos y vencimientos, los datos sobre cómo terminó cada prueba y la evidencia para decidir reembolsos.
 
 ## Reglas de operación
 
@@ -164,19 +213,18 @@ Cada dev tiene una sola app activa a la vez, que avanza por orden de llegada y s
 - Cada usuario se une al grupo de Google por su cuenta. Al subir su primera app, el dev confirma con una casilla que ya está en el grupo. En cada app que sube, confirma con otra casilla que su test cerrado usa el grupo de la plataforma. Ninguna de las dos se verifica.
 - Una vez subida, el dev no puede retirar la app ni cambiar su link de Google Play. Un link incorrecto es responsabilidad del dev.
 - La primera app entra sin requisitos. Las siguientes dependen de la cadena de desbloqueo (ver Compromisos).
-- Una app activa a la vez por dev, en plan gratuito y de pago. Una app deja de estar activa al llegar a Finalizada o Abandonada.
+- Una app activa a la vez por dev, en plan gratuito y de pago. Una app deja de estar activa al llegar a Finalizada, Abandonada o Ignorada.
 - La pantalla de subida muestra el aviso de que la plataforma no garantiza el acceso a producción.
 
 ### Cola y top
 
-- La cola se ordena por antigüedad. Se muestran las 20 próximas apps y la calificación de cada dev.
-- Hay 5 apps en el top. Para entrar, la app necesita su turno y que el dev tenga las instalaciones aprobadas requeridas, contadas desde que subió su app anterior (0 en el lanzamiento).
-- Tiempo en el top: 72 h en el lanzamiento, luego 24 h. Al vencer, la app vuelve a la cola conservando sus postulantes y, cuando regresa, solo necesita los que le faltan.
-- El dev puede pagar una extensión del tiempo en el top, una sola vez por app. Como máximo 2 apps con extensión pagada a la vez.
+- La cola se ordena por grupos y, dentro de cada grupo, por fecha de entrada (ver Cola visible y estados internos). Se muestran las 20 próximas apps y la calificación de cada dev.
+- Hay 5 apps en el top. Para entrar, la app necesita su turno y que el dev tenga las instalaciones aprobadas requeridas, contadas desde que subió su app anterior (0 en el lanzamiento). Las instalaciones solo se exigen la primera vez que la app entra al top.
+- Tiempo en el top: 72 h en el lanzamiento, luego 24 h. Si se acaba antes de recibir el mínimo de postulaciones, la app pasa a Vencida y vuelve a la cola (ver Reencolamiento).
 - Al recibir el mínimo de postulaciones de su plan (12 gratis, 15 de pago), la app pasa a En progreso y libera su lugar.
 - En progreso dura como máximo 24 h. Durante sus primeras 12 h acepta postulantes adicionales hasta el máximo de su plan (15 gratis, 20 de pago); las capturas de los adicionales también cuentan para completar el mínimo.
 - En cuanto las capturas aprobadas llegan al mínimo, por el dev o por aprobación automática, la app pasa a En prueba y deja de mostrarse en la cola, aunque no hayan pasado las 12 h.
-- Si termina la ventana de postulantes adicionales, no quedan capturas pendientes y las aprobadas no llegan al mínimo, la app pasa a Insuficiente. Mientras quede una captura pendiente o la ventana siga abierta, la app sigue En progreso. Dónde vuelve a la cola una app Insuficiente está por definir (ver Pendientes).
+- Si termina la ventana de postulantes adicionales, no quedan capturas pendientes y las aprobadas no llegan al mínimo, la app pasa a Insuficiente y vuelve a la cola (ver Reencolamiento). Mientras quede una captura pendiente o la ventana siga abierta, la app sigue En progreso.
 
 | Caso (plan gratis: mínimo 12) | Resultado |
 | --- | --- |
@@ -185,6 +233,22 @@ Cada dev tiene una sola app activa a la vez, que avanza por orden de llegada y s
 | Rechaza 1 en la hora 5; llega un adicional en la hora 8 y el dev no lo revisa | Se aprueba solo en la hora 24 y pasa a En prueba |
 | Rechaza a ese adicional en la hora 13 | Sin pendientes, ventana cerrada y 11 aprobadas: pasa a Insuficiente |
 | El dev no revisa nada | Todo se aprueba solo en la hora 24 y pasa a En prueba |
+
+### Reencolamiento
+
+Una app reencolada vuelve a Waiting, conserva lo que ya consiguió y, al volver al top, solo necesita lo que le falta.
+
+| Reencolada | Qué conserva | Tiempo en el top al volver | Límite |
+| --- | --- | --- | --- |
+| Insuficiente | Sus capturas aprobadas; las rechazadas no cuentan | 6 h | 2 regresos; si queda Insuficiente una tercera vez, pasa a Ignorada |
+| Arreglada | Todos sus postulantes | El normal | 2 regresos; si se pausa una tercera vez, pasa a Abandonada sin esperar los 7 días |
+| Vencida | Todos sus postulantes, incluidas las capturas pendientes, que se siguen aprobando solas | 12 h | 1 regreso; el segundo vencimiento la deja Ignorada |
+
+- Los vencimientos se cuentan por app, sin importar de dónde venga: la primera vez que se le acaba el tiempo en el top, sea nueva o reencolada, pasa a Vencida; la segunda, a Ignorada.
+- Cada tipo de reencolada tiene su propio contador de regresos.
+- Al volver a llegar a su mínimo, la reencolada pasa otra vez por En progreso con las mismas reglas: 24 h en total y 12 h para postulantes adicionales.
+- Una app Arreglada vuelve con el conteo de reportes para pausar en cero. Los reportes anteriores siguen siendo públicos y quedan en su historial.
+- Los tiempos y los límites son parámetros (ver Parámetros configurables).
 
 ### Postulaciones y capturas
 
@@ -217,7 +281,7 @@ Cada dev tiene una sola app activa a la vez, que avanza por orden de llegada y s
 | 3 | 12 | 20% | No: funciona para casi todos |
 | 6 | 5 | 55% | Sí |
 
-- Cuando el dev indica que la arregló, la app vuelve cerca del top con sus postulantes, sin verificación automática.
+- Cuando el dev indica que la arregló, la app pasa a Arreglada y vuelve a la cola con sus postulantes, sin verificación automática (ver Reencolamiento).
 - Si no la arregla en 7 días, pasa a Abandonada: el dev pierde el desbloqueo usado y su calificación baja.
 - Los reportes no se pueden apelar en el MVP.
 
@@ -251,6 +315,8 @@ Cumplir los compromisos, como dev y como postulante, desbloquea la siguiente app
 - Si una permanencia se rechaza o no se entrega a tiempo, el usuario no puede subir otra app hasta postularse a otra app y que le aprueben esa permanencia.
 - La cadena aplica igual en el plan de pago: pagar quita el límite de cantidad, no los compromisos.
 - Si una app termina Abandonada, el desbloqueo usado para subirla se pierde y la app cuenta igual dentro del total de apps del dev, incluidas las 2 gratuitas.
+- Si una app termina Ignorada, el dev queda libre para su siguiente app y su calificación no baja: la falta de interés no es un compromiso incumplido. La app cuenta igual dentro de su total de apps.
+- Si la app a la que se postuló termina Ignorada o Abandonada, el postulante no tiene permanencia pendiente, porque los 14 días nunca empezaron. Su instalación aprobada cuenta igual para su siguiente app.
 - Por definir: cuántas postulaciones se exigen por ciclo (ver Pendientes).
 
 ### Calificación
@@ -274,7 +340,7 @@ La calificación se calcula con métricas objetivas, no con estrellas: nadie cal
 
 ## Planes, pagos y reembolsos
 
-El modelo es de pago por uso, sin suscripción: se paga por cada app después de las 2 gratuitas y por cada extensión del tiempo en el top.
+El modelo es de pago por uso, sin suscripción: se paga por cada app después de las 2 gratuitas.
 
 | Plan | Apps en total | Apps activas a la vez | Mínimo para avanzar | Máximo de postulantes | Costo |
 | --- | --- | --- | --- | --- | --- |
@@ -283,18 +349,11 @@ El modelo es de pago por uso, sin suscripción: se paga por cada app después de
 
 Las 2 primeras apps de cada usuario son siempre gratuitas, para facilitar la entrada; no se puede pagar en ellas para obtener el margen del plan de pago. Desde la tercera, cada app se paga e incluye el mínimo y el máximo del plan de pago: no son compras separadas. Su margen extra de postulantes reduce el riesgo de quedar por debajo de los 12 testers que exige Google si alguno abandona.
 
-Una app Abandonada cuenta igual dentro de ese total.
-
-### Extensión del tiempo en el top
-
-- Pago individual por cada extensión, en cualquier plan.
-- Una sola extensión por app.
-- Como máximo 2 apps con extensión pagada a la vez en el top, para no frenar la cola.
-- El tiempo pagado corre pase lo que pase con la app; si se pausa, es responsabilidad del dev.
+Una app Abandonada o Ignorada cuenta igual dentro de ese total.
 
 ### Reembolsos
 
-Solo se reembolsa lo pagado cuando falla la plataforma; por ejemplo, la extensión pagada no se aplicó, o la app desapareció de la cola por un error del sistema. Nada que dependa de la app o del dev se reembolsa.
+Solo se reembolsa lo pagado cuando falla la plataforma; por ejemplo, se cobró una app que no entró a la cola, o la app desapareció de la cola por un error del sistema. Nada que dependa de la app o del dev se reembolsa.
 
 ### Usuarios que agotan sus apps gratuitas
 
@@ -316,10 +375,14 @@ La plataforma avisa en cada etapa del proceso, por email y con notificaciones we
 | Pasa a En progreso | Dev | "Alcanzaste tu mínimo de postulantes: valida sus capturas" |
 | Pasa a En prueba | Dev y postulantes | "Se aprobó el mínimo de capturas: empiezan los 14 días" |
 | Pasa a Insuficiente | Dev | "Tu app no llegó al mínimo de capturas aprobadas" |
+| Vuelve a la cola como Insuficiente o Arreglada | Dev | "Tu app volvió a la cola en la posición 3" |
 | Captura aprobada o rechazada | Postulante | "Rechazaron tu captura: no se ve la app instalada" |
 | Toca la captura de permanencia | Postulante | "Hoy toca tu captura de permanencia" |
 | Toca validar permanencias y cerrar | Dev | "Valida las permanencias y cierra antes del día 20" |
 | App pausada por reportes | Dev | "Tu app se pausó: varios usuarios no pueden abrirla" |
+| Pasa a Abandonada | Dev | "Tu app quedó abandonada: no se arregló a tiempo" |
+| Pasa a Ignorada | Dev | "Tu app no consiguió su mínimo de postulantes y quedó ignorada" |
+| Pasa a Ignorada | Postulantes | "Tu instalación cuenta para tu siguiente app; no tienes permanencia pendiente" |
 | Siguiente app desbloqueada | Usuario | "Cumpliste tus compromisos: ya puedes subir tu siguiente app" |
 
 ## Parámetros configurables
@@ -337,9 +400,14 @@ Casi todas las reglas dependen de un parámetro. El valor inicial es el número 
 | Mínimo de postulantes, plan de pago | Número | 12–20 | 15 |
 | Máximo de postulantes, plan de pago | Número | Desde su mínimo hasta 30 | 20 |
 | Tiempo en el top | Horas | 12–168 | 72 (luego 24) |
-| Instalaciones aprobadas requeridas para llegar al top, desde la app anterior | Número | 0–15 | 0 |
+| Tiempo en el top al volver como Insuficiente | Horas | 1–24 | 6 |
+| Tiempo en el top al volver como Arreglada | Horas | 12–168 | Igual al tiempo en el top |
+| Tiempo en el top al volver como Vencida | Horas | 1–24 | 12 |
+| Regresos a la cola como Insuficiente | Número | 0–5 | 2 |
+| Regresos a la cola como Arreglada | Número | 0–5 | 2 |
+| Instalaciones aprobadas requeridas para llegar al top por primera vez, desde la app anterior | Número | 0–15 | 0 |
 | Ventana para postulantes adicionales | Horas desde que la app entra En progreso | Menor que el plazo del dev para validar | 12 |
-| Al vencer el tiempo en el top | Opción | Volver a la cola conservando postulantes · Volver al final sin postulantes | Conservando postulantes |
+| Al vencer el tiempo en el top | Opción | Volver a la cola conservando postulantes · Volver a la cola sin postulantes | Conservando postulantes |
 
 ### Capturas y validación
 
@@ -351,7 +419,7 @@ Casi todas las reglas dependen de un parámetro. El valor inicial es el número 
 | Justificación de rechazos y reportes: mínimo | Caracteres | 10–100 | 30 |
 | Justificación de rechazos y reportes: máximo | Caracteres | 100–500 | 280 |
 | Detección de capturas duplicadas | Opción | Apagada · Advertir al dev · Bloquear | Bloquear |
-| Retención de capturas | Días después de finalizar | 7–90 | 30 |
+| Retención de capturas | Días desde que se envía cada captura | 30–365 | 90 |
 
 ### Cierre y reportes
 
@@ -392,9 +460,6 @@ Los cuatro pesos deben sumar 100.
 | Apps gratuitas en total | Número | 1–10 | 2 |
 | Apps activas a la vez por dev | Número | Fijo en 1 durante el MVP | 1 |
 | Grupos de Google | Opción | Solo el de la plataforma · Plataforma y propios | Solo el de la plataforma |
-| Extensión pagada del tiempo en el top | Encendida o apagada, más horas por extensión | 12–72 h | Apagada (24 h al activarla) |
-| Máximo de apps con extensión pagada en el top | Número | 1 hasta el tamaño del top | 2 |
-| Extensiones pagadas por app | Número | Fijo en 1 durante el MVP | 1 |
 
 ## Riesgos asumidos, privacidad y avisos
 
@@ -414,7 +479,7 @@ El MVP acepta varios riesgos a cambio de simplicidad y de no castigar a usuarios
 | Grupo de Google confirmado sin verificar | No hay conexión con Google Play | Reportes y pausa automática |
 | Link de Google Play incorrecto | No se puede corregir después de subir la app; es responsabilidad del dev | Reportes y pausa automática |
 | Postulantes que salen del test antes del día 14 | No hay conexión con Google Play ni forma de detectarlo | Captura de permanencia y su rechazo por el dev |
-| Una app pausada vuelve sin estar arreglada | La apelación no se puede verificar | Si sigue fallando, los nuevos reportes la pausan otra vez |
+| Una app pausada vuelve sin estar arreglada | La apelación no se puede verificar | Si sigue fallando, los nuevos reportes la pausan otra vez; después de 2 regresos, la siguiente pausa la deja Abandonada |
 | Una persona con varias cuentas | Verificar identidad queda fuera del MVP | Package name único y calificación |
 | Un dev que abandona la plataforma | No hay forma de obligarlo a volver | Cierre automático y calificación |
 | Participación mínima: abrir la app solo para la captura | Las capturas prueban que se abrió, no que se usó | Aviso de que no se garantiza la aprobación de Google |
@@ -424,7 +489,7 @@ El MVP acepta varios riesgos a cambio de simplicidad y de no castigar a usuarios
 
 - Una captura puede mostrar el email, la foto o las notificaciones del postulante. La plataforma le pide recortar o tapar datos personales antes de enviarla.
 - Solo el dev de esa app ve las capturas. Los rechazos y reportes son públicos, pero sin sus capturas.
-- Las capturas se borran 30 días después de que la app llega a Finalizada.
+- Todas las capturas (de instalación, de permanencia, de reportes y de cierre) se borran 90 días después de enviarse, sin importar cómo termine la app.
 
 ### Baja de usuarios
 
@@ -443,22 +508,23 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 ### Por decidir dentro del MVP
 
 - [ ] **Postulaciones por ciclo:** hoy basta una instalación aprobada en la app de otro, desde la app anterior, para desbloquear la siguiente. ¿Se exigen más? Si se exigen, entra como parámetro.
-- [ ] **Estados internos para volver a encolar:** definir los estados y la posición de las apps que vuelven a la cola. Propuestas iniciales:
-  - Tiempo en el top vencido: vuelve a la cola de espera normal.
-  - Insuficiente (ya definido cuándo ocurre; falta su regreso): se encola justo después del top, se muestra con las apps en espera y, al volver al top, su tiempo ahí es mucho menor.
-  - Pausada y arreglada: su posición "cerca del top".
-- [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos).
+- [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de las apps).
 
 ### Por decidir cerca del lanzamiento
 
-- [ ] Precio por app adicional y por extensión del tiempo en el top.
+- [ ] Precio por app adicional.
 - [ ] Valores iniciales definitivos de los parámetros.
 - [ ] Plan de arranque: de dónde vienen los primeros 20 a 50 usuarios activos.
+
+### Para la sesión de arquitectura
+
+- Evaluar máquinas de estados para la app, las capturas (pendiente, aprobada o rechazada) y los compromisos (pendiente, cumplido o vencido). Las transiciones y sus condiciones, incluida la cadena de responsabilidad, quedan explícitas, y cada transición alimenta el historial de estados. Lo más delicado son las transiciones por plazo: vencimiento del top, aprobación automática y día límite de cierre.
 
 ### Fuera del MVP
 
 - Apps simultáneas por dev, respetando la cadena de compromisos. Punto de partida: permitir una app nueva si el usuario no tiene compromisos vencidos y hizo X instalaciones nuevas desde la última app.
 - Grupos de Google propios del dev, como función activable.
+- Extensión pagada del tiempo en el top: hoy va en contra de agilizar la cola. Si se retoma, se define entonces.
 - Traspaso de package names entre cuentas.
 - Avisos por tiempo estimado de espera.
 - Moderación de rechazos y apelaciones de capturas y de reportes.
