@@ -71,13 +71,13 @@ El MVP busca que cada app consiga los testers comprometidos de su plan sin que l
 - Notificaciones por email y web push en cada etapa.
 - Parámetros configurables.
 - Panel de administración (por definir; ver Pendientes).
-- Baja de usuarios sin compromisos pendientes (por definir; ver Pendientes).
 
 ### Fuera del alcance
 
 - Garantizar el acceso a producción en Google Play.
 - Validar automáticamente capturas, disponibilidad por país o apelaciones.
 - Arquitectura técnica: se define en otra sesión.
+- Baja de usuarios.
 - Funciones posteriores al MVP, listadas en Pendientes.
 
 ## Terminología y principios
@@ -415,8 +415,9 @@ El MVP acepta varios riesgos a cambio de simplicidad y de no castigar a usuarios
 
 ### Baja de usuarios
 
-- Un usuario solo puede darse de baja cuando no tiene compromisos pendientes, ni como dev ni como postulante.
-- Por definir: cómo y cuándo se elimina la cuenta (por ejemplo, con una tarea programada) y qué pasa con su historial público (ver Pendientes).
+- La baja de usuarios queda fuera del MVP: en el lanzamiento no se pueden eliminar cuentas.
+- Cuando se incluya, un usuario solo podrá darse de baja si no tiene compromisos pendientes, ni como dev ni como postulante.
+- Queda por definir cómo y cuándo se elimina la cuenta (por ejemplo, con una tarea programada) y qué pasa con su historial público (ver Pendientes).
 
 ### Aviso en los términos y en la pantalla de subida
 
@@ -438,7 +439,6 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
   - Pausada y arreglada: su posición "cerca del top".
 - [ ] **Nombre de la parte en espera de la cola:** buscar un término mejor para las apps que no están en el top ni En progreso (hoy en la UI: "Waiting").
 - [ ] **Panel de administración:** alcance y funciones (parámetros, incidencias, reembolsos).
-- [ ] **Baja de usuarios:** cómo y cuándo se elimina la cuenta (por ejemplo, con una tarea programada) y qué pasa con su historial público: rechazos, reportes y calificación visibles en las apps de otros.
 
 ### Por decidir cerca del lanzamiento
 
@@ -453,6 +453,7 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 - Traspaso de package names entre cuentas.
 - Avisos por tiempo estimado de espera.
 - Moderación de rechazos y apelaciones de capturas y de reportes.
+- Baja de usuarios, solo sin compromisos pendientes. Falta definir cómo y cuándo se elimina la cuenta (por ejemplo, con una tarea programada) y qué pasa con su historial público: rechazos, reportes y calificación visibles en las apps de otros.
 
 ### Fuentes
 
