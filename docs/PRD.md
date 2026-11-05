@@ -64,7 +64,7 @@ Los parámetros (ver Parámetros configurables) se cambian en producción, sin d
 | Grupo de Google propio | Al crear la app | Una app creada con su propio grupo lo conserva, también al reencolarla, aunque la función se desactive |
 | Retención de capturas | Al enviar cada captura | Una captura enviada con 90 días de retención se borra a los 90 días, aunque el parámetro baje a 60 |
 
-Para los demás parámetros falta verificar que un cambio no afecte a procesos en curso (ver Pendientes).
+Para los demás parámetros falta verificar que un cambio no afecte a procesos en curso (ver [Propuesta para fijar los demás parámetros](#propuesta-para-fijar-los-demás-parámetros)).
 
 ## Objetivos y alcance del MVP
 
@@ -584,13 +584,55 @@ La baja de usuarios queda fuera del MVP: en el lanzamiento no se pueden eliminar
 
 La captura de Play Console y el resultado en Google Play son informativos y alimentan las estadísticas de la plataforma.
 
+## Propuesta para fijar los demás parámetros
+
+Propuesta para el pendiente [Verificar que los cambios a nivel de sistema no afecten a procesos en curso](#por-decidir-dentro-del-mvp). Indica en qué momento queda fijado cada parámetro que todavía no figura en [Cambios de configuración](#cambios-de-configuración). Cuando se apruebe, cada fila pasa a esa tabla.
+
+Algunos parámetros no se fijan por cuenta ni por app: valen para toda la plataforma o solo cambian lo que se muestra. Esos aplican de inmediato, con una regla que evita efectos sobre lo que ya empezó.
+
+### Cola
+
+| Parámetro | Qué pasa si cambia sin regla | Queda fijado |
+| --- | --- | --- |
+| Tamaño del top | Si baja de 5 a 3 con 5 apps en el top, no está claro si 2 salen antes de tiempo | Aplica de inmediato y no saca a ninguna app: las que están en el top se quedan hasta salir por sus reglas, y no entra ninguna nueva hasta que queden menos que el nuevo tamaño. Si sube, entran apps de inmediato |
+| Apps visibles en la cola | Si pasa de 20 a 30, aparecen 10 apps de golpe y no está claro si reciben el aviso | Aplica de inmediato, porque solo cambia lo que se muestra. Los avisos no se envían de forma retroactiva y cada uno se envía una sola vez por paso por Waiting |
+| Regresos a la cola como Insuficiente | Si el límite baja de 2 a 1, un registro que ya usó un regreso pasa a Ignorada en el siguiente, aunque al entrar tenía 2 | Al enviar la app a la cola, igual que el mínimo y el máximo de postulantes. Un regreso conserva el suyo; un registro reencolado toma el vigente |
+| Regresos a la cola como Arreglada | Igual al anterior, pero la app pasa a Abandonada | Al enviar la app a la cola, igual que el anterior |
+| Ventana para postulantes adicionales | Si baja de 12 h a 6 h en la hora 8, la ventana se cierra en el acto | Al entrar En progreso, junto con el plazo del dev de ese estado, para que la ventana siga siendo menor que el plazo |
+
+### Capturas y validación
+
+| Parámetro | Qué pasa si cambia sin regla | Queda fijado |
+| --- | --- | --- |
+| Plazo del dev para validar, en las capturas de instalación | Si baja, las capturas se aprueban solas antes de lo anunciado; si sube, el postulante espera más | Al enviar cada captura. En En progreso, al entrar en ese estado, porque el límite es único |
+| Plazo del dev para validar, en las capturas de permanencia | Cambia la fecha de cierre que ya se le mostró al dev | Al pasar a En prueba, junto con la fecha de cierre (ver Postulaciones y capturas) |
+| Ventana para la captura de permanencia | Si baja de 48 h a 24 h, quien pensaba enviarla en la hora 30 queda como no cumplida en su calificación | Al pasar a En prueba, igual para todos los postulantes de la app |
+| Recordatorio antes de la aprobación automática | El aviso al dev se salta o se repite | Junto con el plazo al que recuerda |
+| Aviso antes de que se cierre la ventana de permanencia | El aviso al postulante se salta o se repite | Al pasar a En prueba, junto con la ventana de permanencia |
+| Justificación de rechazos y reportes: mínimo y máximo | Un texto a medio escribir deja de ser válido al enviarlo; los ya publicados podrían quedar fuera de rango | Al enviar el rechazo o el reporte. Los ya publicados no se vuelven a validar |
+
+### Reportes
+
+| Parámetro | Qué pasa si cambia sin regla | Queda fijado |
+| --- | --- | --- |
+| Mínimo de reportes de cuentas distintas | Si baja de 3 a 2, una app en el top con 2 reportes se pausa de golpe | Al entrar al top. Los reportes solo se hacen en el top y su conteo vuelve a cero al volver como Arreglada |
+| Porcentaje de reportes para pausar | Igual al anterior | Al entrar al top, igual que el anterior |
+| Días para arreglar una app pausada | Si baja de 7 a 3 en el día 5, la app pasa a Abandonada en el acto | Al pasar a Pausada |
+
+### Avisos de posición
+
+| Parámetro | Qué pasa si cambia sin regla | Queda fijado |
+| --- | --- | --- |
+| Aviso de cercanía a la lista visible | Avisos que se repiten o que no llegan | Aplica de inmediato, sin envíos retroactivos y con un solo aviso por paso por Waiting |
+| Aviso de cercanía al top | Igual al anterior | Igual al anterior |
+
 ## Pendientes y fuera del MVP
 
 El concepto está cerrado; quedan decisiones que se toman con datos, cerca del lanzamiento o que siguen en análisis.
 
 ### Por decidir dentro del MVP
 
-- [ ] **Verificar que los cambios a nivel de sistema no afecten a procesos en curso:** definir en qué momento queda fijado cada parámetro que todavía no figura en Cambios de configuración.
+- [ ] **Verificar que los cambios a nivel de sistema no afecten a procesos en curso:** definir en qué momento queda fijado cada parámetro que todavía no figura en Cambios de configuración. Ver la propuesta en [Propuesta para fijar los demás parámetros](#propuesta-para-fijar-los-demás-parámetros).
 - [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de los registros).
 
 ### Por decidir cerca del lanzamiento
