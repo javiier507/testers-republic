@@ -283,9 +283,9 @@ Un regreso es el mismo registro que vuelve a Waiting: conserva lo que ya consigu
 ### Postulaciones y capturas
 
 - Postularse es enviar la captura de instalación. No hay límite de postulaciones simultáneas.
-- La postulación es a un registro en la cola, no a la app. Si una app se reencola, quienes se postularon a un registro anterior pueden postularse al nuevo, y esa es una instalación nueva.
+- La postulación es a un registro en la cola, no a la app. Cada usuario se postula una sola vez por registro, aunque el registro vuelva a la cola como regreso. Si una app se reencola, quienes se postularon a un registro anterior pueden postularse al nuevo, y esa es una instalación nueva.
 - Toda captura, de instalación o de permanencia, empieza como pendiente y pasa a aprobada o rechazada.
-- Una captura rechazada no se puede reenviar: el rechazo es definitivo y no se puede apelar.
+- Una captura rechazada no se puede reenviar: el rechazo es definitivo y no se puede apelar. Quien recibió el rechazo tampoco puede volver a postularse a ese registro, aunque vuelva a la cola como regreso.
 
 Una captura de instalación cuenta distinto para la app del dev y para el postulante, según su estado:
 
