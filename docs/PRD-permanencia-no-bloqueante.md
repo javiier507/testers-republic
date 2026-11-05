@@ -23,7 +23,7 @@ La permanencia deja de bloquear y pasa al sistema de confianza: la plataforma mu
 | Cierre | El dev cierra antes del día 20 | 48 h para que los postulantes envíen su permanencia y luego 24 h para que el dev las valide |
 | Abandonada | Pierde el desbloqueo usado y baja la calificación | Ocupa su espacio; reencolarla se paga y solo se puede una vez |
 | Reencolar una app | No está definido | Abandonada, una vez y pagando; Finalizada, pagando y sin límite; Ignorada, nunca |
-| Insuficiente, Arreglada y Vencida | Se llaman "reencoladas" | Se llaman "regresos": el mismo registro cambia de estado y vuelve a Waiting |
+| Insuficiente, Arreglada y Expirada | Se llaman "reencoladas" | Se llaman "regresos": el mismo registro cambia de estado y vuelve a Waiting |
 | Detección de duplicados | En el MVP | Fuera del MVP |
 
 ## Regla base: la cadena de responsabilidad
@@ -85,10 +85,10 @@ Se agrega una señal:
 | --- | --- |
 | App | El software que se sube para conseguir testers. Su nombre y su package name no cambian después de crearse. Tiene un registro en la cola, o varios si se reencola |
 | Registro en la cola | Cada paso de una app por la cola. Tiene su estado, sus postulantes, sus capturas, sus regresos y sus reportes. Los postulantes se postulan a un registro, no a la app |
-| Regreso | Un registro que vuelve a Waiting como Insuficiente, Arreglada o Vencida. Es el mismo registro que cambia de estado. Reemplaza al término "Reencolada" del PRD |
+| Regreso | Un registro que vuelve a Waiting como Insuficiente, Arreglada o Expirada. Es el mismo registro que cambia de estado. Reemplaza al término "Reencolada" del PRD |
 | Reencolar | Función de pago: crea un registro nuevo en la cola para una app Abandonada o Finalizada |
 | Compromiso | Una obligación del postulante con plazo: instalar o permanecer |
-| Cierre | El dev valida las permanencias de su app; si no lo hace, la plataforma la cierra al vencer su plazo |
+| Cierre | El dev valida las permanencias de su app; si no lo hace, la plataforma la cierra al expirar su plazo |
 | Calificación | Cuántas permanencias cumplió el usuario como postulante, sobre todas las que se resolvieron |
 
 Postularse sigue siendo enviar la captura de instalación, pero no es un compromiso propio: queda incluido en las instalaciones requeridas.
@@ -103,7 +103,7 @@ Todas las menciones de "reencolada" y "reencolamiento" del PRD pasan a "regreso"
 | Se agrega | — | Pago para reencolar una app Abandonada o Finalizada |
 | Se quita | — | Bloqueo por permanencia fallida |
 | Se quita | — | Detección de capturas duplicadas |
-| Cambia | — | "Cierre automático al día límite" pasa a ser: cierre automático al vencer el plazo del dev para validar las permanencias |
+| Cambia | — | "Cierre automático al día límite" pasa a ser: cierre automático al expirar el plazo del dev para validar las permanencias |
 
 ## Flujo y estados de una app
 
@@ -112,7 +112,7 @@ Todas las menciones de "reencolada" y "reencolamiento" del PRD pasan a "regreso"
 | Estado | Qué pasa |
 | --- | --- |
 | Por cerrar | Desde que se cumplen los 14 días: los postulantes tienen 48 h para enviar su captura de permanencia y luego el dev tiene 24 h para validarlas |
-| Finalizada | No queda ninguna permanencia por entregar ni por validar, porque el dev las validó o porque vencieron los plazos; el dev queda libre para su siguiente app |
+| Finalizada | No queda ninguna permanencia por entregar ni por validar, porque el dev las validó o porque expiraron los plazos; el dev queda libre para su siguiente app |
 | Abandonada | No se arregló a tiempo, o se pausó otra vez después de agotar sus regresos como Arreglada; el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total de apps. Se puede reencolar una vez, pagando |
 | Ignorada | Se le acabó el tiempo en el top por segunda vez, o quedó Insuficiente otra vez después de agotar sus regresos; el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total de apps. No se puede reencolar |
 
@@ -165,7 +165,7 @@ Reemplaza la sección completa. El cierre tiene dos partes:
 | --- | --- |
 | Se cumplen los 14 días en prueba | Se abre la ventana de permanencia: cada postulante tiene 48 h para enviar su captura. Recibe un aviso al abrirse y otro 12 h antes del cierre |
 | Se cierra la ventana | Quien no envió su captura incumplió. Empieza el plazo del dev: 24 h para validar todas las capturas de permanencia |
-| Vence el plazo del dev | Las capturas que no revisó se aprueban solas y la plataforma cierra la app |
+| Expira el plazo del dev | Las capturas que no revisó se aprueban solas y la plataforma cierra la app |
 
 - El dev puede validar cada captura apenas llega, sin esperar a que se cierre la ventana. El plazo de 24 h es único para todas las capturas y se cuenta desde que se cierra la ventana.
 - El dev no puede cerrar con permanencias pendientes. Aprobar o rechazar todas las capturas es lo que cierra la app de forma manual.
