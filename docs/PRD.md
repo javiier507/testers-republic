@@ -61,6 +61,7 @@ Los parámetros (ver Parámetros configurables) se cambian en producción, sin d
 | Instalaciones requeridas | En cada envío a la cola, sea al subir una app o al reencolarla. Se fijan los valores de ambos planes (ver Instalaciones requeridas por plan) | Quien sube su app con 3 requeridas necesita 3 para su siguiente envío, aunque el parámetro pase a 5 o a 2 |
 | Mínimo y máximo de postulantes | Al enviar la app a la cola. Un regreso conserva los suyos; un registro reencolado toma los vigentes al reencolar | Una app subida con un mínimo de 12 necesita 12, aunque el parámetro pase a 13 mientras espera o vuelve como regreso |
 | Tiempo en el top | Al entrar al top (ver Cola y top) | Una app que entra al top con 72 h las conserva, aunque el parámetro baje a 24 h |
+| Grupo de Google propio | Al crear la app | Una app creada con su propio grupo lo conserva, también al reencolarla, aunque la función se desactive |
 | Retención de capturas | Al enviar cada captura | Una captura enviada con 90 días de retención se borra a los 90 días, aunque el parámetro baje a 60 |
 
 Para los demás parámetros falta verificar que un cambio no afecte a procesos en curso (ver Pendientes).
@@ -114,7 +115,7 @@ La plataforma no usa la palabra "aplicación": el software es una **app** y la a
 
 | Término | Significado |
 | --- | --- |
-| App | El software que se sube para conseguir testers. Su nombre y su package name no cambian después de crearse. Tiene un registro en la cola, o varios si se reencola |
+| App | El software que se sube para conseguir testers. Su nombre, su link de Google Play, su package name y sus grupos de Google no cambian después de crearse, ni al reencolarla. Tiene un registro en la cola, o varios si se reencola |
 | Registro en la cola | Cada paso de una app por la cola. Tiene su estado, sus postulantes, sus capturas, sus regresos y sus reportes. Los postulantes se postulan a un registro, no a la app |
 | Usuario | Una sola cuenta que actúa en dos roles: dev y postulante |
 | Dev | El usuario cuando sube su app |
@@ -144,7 +145,7 @@ La plataforma equilibra dos sistemas para que la cola avance. **Confianza** es l
 | El dev valida las capturas | Aprobación automática al expirar el plazo |
 | El postulante elige a qué apps postularse | El top limita cuántas apps compiten por testers al mismo tiempo |
 | El dev declara que su app está disponible en todos los países | Tiempo límite en el top |
-| El dev confirma que está en el grupo de Google y que su test cerrado lo usa | Rechazos y reportes públicos |
+| El dev confirma que está en el grupo de Google y que su test cerrado usa los grupos de su app | Rechazos y reportes públicos |
 | El dev indica que arregló una app pausada | Pausa automática por reportes |
 | El dev informa su resultado en Google Play | Cierre automático al expirar el plazo del dev para validar las permanencias |
 | Cada usuario decide si confía en otro según su calificación | Pago para reencolar una app Abandonada o Finalizada |
@@ -235,8 +236,9 @@ Cada dev tiene una sola app activa a la vez, que avanza según su turno en la co
 - El dev pega el link de Google Play de su test cerrado; la plataforma extrae el package name.
 - Cada package name pertenece a una sola cuenta: la primera que lo registra.
 - El dev marca una casilla confirmando que la app está disponible en todos los países.
-- El test cerrado usa el grupo de Google de la plataforma. Los grupos propios del dev quedan como función activable.
-- Cada usuario se une al grupo de Google por su cuenta. Al subir su primera app, el dev confirma con una casilla que ya está en el grupo. En cada app que sube, confirma con otra casilla que su test cerrado usa el grupo de la plataforma. Ninguna de las dos se verifica.
+- El test cerrado usa el grupo de Google de la plataforma. Si la función de grupo propio está activa (ver Parámetros configurables), al subir la app el dev puede agregar también su propio grupo. Los grupos quedan fijados al crear la app.
+- Cada usuario se une al grupo de Google de la plataforma por su cuenta. Al subir su primera app, el dev confirma con una casilla que ya está en el grupo. En cada app que sube, confirma con otra casilla que su test cerrado usa los grupos de la app. Ninguna de las dos se verifica.
+- Si la app tiene un grupo propio, la plataforma muestra su enlace y el postulante se une a él antes de instalar.
 - Una vez subida, el dev no puede retirar la app ni cambiar su link de Google Play. Un link incorrecto es responsabilidad del dev.
 - La primera app entra sin requisitos. Las siguientes dependen de la cadena de desbloqueo (ver Compromisos).
 - Una app activa a la vez por dev, en plan gratuito y de pago. Una app deja de estar activa al llegar a Finalizada, Abandonada o Ignorada. Al reencolarse, vuelve a estar activa hasta que su registro nuevo llegue a uno de esos estados.
@@ -302,7 +304,7 @@ Una captura de instalación cuenta distinto para la app del dev y para el postul
 
 - El dev valida todas las postulaciones que recibe, hasta el máximo de su plan. Tiene 24 h por captura y recibe un recordatorio 6 h antes de que se aprueben solas. En En progreso el límite es único: todas las capturas pendientes se aprueban solas como tarde a las 24 h de que la app entró en ese estado, incluidas las de los postulantes adicionales. La demora del dev nunca castiga al postulante.
 - Un rechazo requiere una justificación escrita de 30 a 280 caracteres y se basa en la captura, nunca en la calificación del postulante.
-- Los 14 días empiezan cuando las capturas aprobadas llegan al mínimo de su plan (12 o 15) y la app pasa a En prueba. La plataforma muestra al dev dos fechas: desde cuándo puede solicitar producción a Google y la fecha en que su app se cierra a más tardar, 72 h después de cumplirse los 14 días.
+- Los 14 días empiezan cuando las capturas aprobadas llegan al mínimo de su plan (12 o 15) y la app pasa a En prueba. La plataforma muestra al dev dos fechas: desde cuándo puede solicitar producción a Google y la fecha en que su app se cierra a más tardar. Ambas se calculan para cada app al pasar a En prueba, con los valores vigentes en ese momento. La fecha de cierre suma dos plazos desde que se cumplen los 14 días: la ventana para enviar las capturas de permanencia (48 h) y el plazo del dev para validarlas (24 h).
 - Los postulantes adicionales se unen antes de que empiecen los 14 días, así que el día 14 y la ventana de permanencia son los mismos para todos los postulantes de la app.
 - La captura de permanencia se envía cuando se cumplen los 14 días, dentro de una ventana de 48 h. Si el postulante no la envía, cuenta como no cumplida en su calificación.
 - El dev valida las capturas de permanencia, con una justificación escrita para cada rechazo; sin respuesta dentro de su plazo, se aprueban solas (ver Cierre). El rechazo no se puede apelar y cuenta como no cumplida en la calificación del postulante; no bloquea su siguiente app.
@@ -325,7 +327,7 @@ El cierre tiene dos partes:
 
 ### Reportes de "no abre" o "no disponible"
 
-- Cualquier usuario puede reportar una app, pero solo mientras está en el top. Cada reporte lleva captura, un motivo (no abre, no disponible en mi país, pide login o se cierra) y una justificación escrita de 30 a 280 caracteres.
+- Cualquier usuario puede reportar una app, pero solo mientras está en el top. Cada reporte lleva captura, un motivo (no abre, no disponible en mi país, pide login, se cierra o no puedo unirme a su grupo de Google) y una justificación escrita de 30 a 280 caracteres.
 - La app se pausa cuando recibe **al menos 3 reportes de cuentas distintas** y esos reportes son **más del 50%** de los usuarios que interactuaron con ella (postulaciones más reportes).
 
 | Reportes | Postulaciones | % de reportes | ¿Se pausa? |
@@ -430,7 +432,7 @@ Las 2 primeras apps de cada usuario son siempre gratuitas, para facilitar la ent
 
 Una app Abandonada o Ignorada sigue ocupando su espacio dentro de ese total. Si era gratuita, consumió una de las 2 gratuitas.
 
-Reencolar una app Abandonada o Finalizada se paga siempre, aunque al usuario le queden apps gratuitas. No ocupa otro espacio en su total. El registro nuevo recibe el mínimo y el máximo del plan de pago.
+Reencolar una app Abandonada o Finalizada se paga siempre, al mismo precio que una app de pago, aunque al usuario le queden apps gratuitas. No ocupa otro espacio en su total. El registro nuevo recibe el mínimo y el máximo del plan de pago.
 
 ### Reembolsos
 
@@ -491,7 +493,6 @@ Casi todas las reglas dependen de un parámetro. El valor inicial es el número 
 | Regresos a la cola como Insuficiente | Número | 0–5 | 2 |
 | Regresos a la cola como Arreglada | Número | 0–5 | 2 |
 | Ventana para postulantes adicionales | Horas desde que la app entra En progreso | Menor que el plazo del dev para validar | 12 |
-| Al expirar el tiempo en el top | Opción | Volver a la cola conservando postulantes · Volver a la cola sin postulantes | Conservando postulantes |
 
 ### Capturas y validación
 
@@ -528,7 +529,7 @@ Casi todas las reglas dependen de un parámetro. El valor inicial es el número 
 | Instalaciones aprobadas requeridas para subir una app gratuita, desde el envío anterior | Número | 1–15 | 3 |
 | Instalaciones aprobadas requeridas para subir una app de pago o reencolar, desde el envío anterior | Número | 1–15 | 3 |
 | Apps activas a la vez por dev | Número | Fijo en 1 durante el MVP | 1 |
-| Grupos de Google | Opción | Solo el de la plataforma · Plataforma y propios | Solo el de la plataforma |
+| Grupo de Google propio por app | Feature flag | Activo · Inactivo | Inactivo |
 
 Lo recomendado es que las instalaciones requeridas de ambos planes tengan el mismo valor: valores distintos debilitan la cadena de responsabilidad (ver Instalaciones requeridas por plan).
 
@@ -594,7 +595,7 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 
 ### Por decidir cerca del lanzamiento
 
-- [ ] Precio por app adicional y por reencolar una app.
+- [ ] Precio por app de pago. Reencolar cuesta lo mismo, porque es volver a enviar una app a la cola.
 - [ ] Valores iniciales definitivos de los parámetros.
 - [ ] Plan de arranque: de dónde vienen los primeros 20 a 50 usuarios activos.
 
@@ -606,7 +607,6 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 
 - Calificación mínima para subir otra app: se define con datos reales del lanzamiento. En el MVP la calificación es informativa y no bloquea.
 - Apps simultáneas por dev, respetando la cadena de responsabilidad. Punto de partida: permitir una app nueva si el usuario reunió X instalaciones aprobadas nuevas desde la última app.
-- Grupos de Google propios del dev, como función activable.
 - Extensión pagada del tiempo en el top: hoy va en contra de agilizar la cola. Si se retoma, se define entonces.
 - Traspaso de package names entre cuentas.
 - Retirar apps de la cola: para que un dev que se equivocó (link, nombre u otro dato) pueda corregirlo sin esperar los reportes. Si se retoma, debe respetar la cadena de responsabilidad: volver a enviar la app a la cola exige las condiciones de la regla base.
