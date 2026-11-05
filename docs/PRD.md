@@ -600,7 +600,7 @@ El costo de cerrar un parámetro es lo que se mueve en el resto de la plataforma
 
 ### Resolver antes del MVP
 
-Están aquí porque aparecen en las señales para ajustar la cola (filas 1 y 2) o porque siempre hay algo en curso que el cambio dañaría sin vuelta atrás (filas 3 a 5). El mínimo de reportes y el porcentaje para pausar también se resuelven antes del MVP, pero quedan como punto abierto (ver [Por decidir dentro del MVP](#por-decidir-dentro-del-mvp)).
+Están aquí porque aparecen en las señales para ajustar la cola (filas 1 y 2) o porque siempre hay algo en curso que el cambio dañaría sin vuelta atrás (filas 3 a 5). El mínimo de reportes y el porcentaje para pausar también se resuelven antes del MVP, pero quedan como punto abierto (ver Notas).
 
 | # | Parámetro | Qué pasa si cambia sin regla | Queda fijado | Costo | Efectos secundarios |
 | --- | --- | --- | --- | --- | --- |
@@ -632,6 +632,7 @@ Ninguno aparece en las señales para ajustar la cola. Si cambian, el daño es me
 - **Regresos que vuelven a En progreso (fila 2).** Si la ventana se fija al entrar En progreso, un regreso que vuelve a ese estado toma el valor vigente en ese momento. Es coherente con el tiempo en el top, que se fija en cada entrada al top, pero no con el mínimo y el máximo de postulantes, que un regreso conserva. Falta decidir cuál aplica: Regresos dice hoy "24 h en total y 12 h para postulantes adicionales".
 - **Plazo del dev compartido (filas 3 y 4).** Un solo parámetro sirve para las capturas de instalación y de permanencia. Separarlo en dos permitiría ajustar uno sin mover el otro.
 - **Avisos con horas (filas 2 a 5, 9 y 10).** Los avisos que muestran un plazo, como "tienes 48 h para enviarla" o "Tienes 24 h para validar", deben usar el valor fijado de cada app, no el vigente. Es una sola regla para todos los avisos, por eso no sube el costo de esas filas.
+- **Mínimo de reportes de cuentas distintas y porcentaje de reportes para pausar (punto abierto).** Se resuelven antes del MVP, porque los reportes falsos son un riesgo del lanzamiento que puede pedir un ajuste rápido y siempre hay apps en el top. Sin regla, si el mínimo baja de 3 a 2, una app en el top con 2 reportes se pausa de golpe. Falta decidir cuándo quedan fijados los dos, que se evalúan juntos para pausar una app. Fijarlos al entrar al top deja un hueco: una app Expirada o Insuficiente vuelve al top con los reportes que ya tenía, porque solo la Arreglada reinicia el conteo, y se mediría contra un umbral nuevo. Fijarlos al enviar la app a la cola, como el mínimo y el máximo de postulantes, cierra el hueco sin efectos secundarios.
 
 ## Pendientes y fuera del MVP
 
@@ -640,7 +641,6 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 ### Por decidir dentro del MVP
 
 - [ ] **Verificar que los cambios a nivel de sistema no afecten a procesos en curso:** definir en qué momento queda fijado cada parámetro que todavía no figura en Cambios de configuración. Ver la propuesta en [Propuesta para fijar los demás parámetros](#propuesta-para-fijar-los-demás-parámetros).
-- [ ] **Momento en que se fijan los umbrales de reportes:** el mínimo de reportes de cuentas distintas y el porcentaje para pausar se resuelven antes del MVP, porque los reportes falsos son un riesgo del lanzamiento que puede pedir un ajuste rápido y siempre hay apps en el top. Sin regla, si el mínimo baja de 3 a 2, una app en el top con 2 reportes se pausa de golpe. Fijarlos al entrar al top deja un hueco: una app Expirada o Insuficiente vuelve al top con los reportes que ya tenía, porque solo la Arreglada reinicia el conteo, y se mediría contra un umbral nuevo. Fijarlos al enviar la app a la cola, como el mínimo y el máximo de postulantes, cierra el hueco sin efectos secundarios.
 - [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de los registros).
 
 ### Por decidir cerca del lanzamiento
