@@ -23,7 +23,7 @@ The UI never uses "application"; the software is always an **app**.
 | Top | Top | "Top 5 · Open for testers", "positions to the top" |
 | Lugar en el top | Slot | "#6 takes the next free slot" |
 | Posición | Position | "14 positions to the top · we'll notify you at 3" |
-| En espera (state) | Waiting | Section with the next 20 apps waiting their turn: new and requeued apps together, with no visual difference |
+| En espera (state) | Waiting | Section with the next 20 apps waiting their turn: new apps and returns together, with no visual difference |
 | En progreso (state) | In progress | "Reached their minimum — extra testers can join for 12 h while the dev reviews screenshots" |
 | Ventana para postulantes adicionales | h left | "8 h left · 5 spots" on In progress apps |
 | En prueba (state) | Running | Minimum of install screenshots approved; 14-day test running, no one else can join. Not shown in the queue, only in "My apps" and "Testing" |
@@ -36,7 +36,7 @@ The UI never uses "application"; the software is always an **app**.
 | PRD term | UI term | Usage in the design |
 | --- | --- | --- |
 | Compromisos | Commitments | Navbar item "Your commitments" |
-| Calificación | Rating | Column and navbar value, shown as a percentage |
+| Calificación | Rating | Column and navbar value, shown as completed retention screenshots out of resolved ones: "11 of 12" |
 | Insignia "Nuevo" | New | Shown instead of a rating for new accounts |
 
 ## Other copy
