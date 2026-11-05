@@ -28,7 +28,7 @@ Toda función, gratuita o de pago, actual o futura, debe respetar la cadena de r
 La primera app no exige nada. Desde la segunda, para subir la siguiente app el usuario necesita:
 
 1. Que su app anterior ya no esté activa: Finalizada, Abandonada o Ignorada.
-2. Las instalaciones aprobadas requeridas en apps de otros (3 en el lanzamiento) desde que subió su app anterior.
+2. Las instalaciones aprobadas requeridas en apps de otros (3 en el lanzamiento) desde su último envío a la cola, sea al subir una app o al reencolarla.
 
 Una instalación pendiente todavía no cuenta para el desbloqueo: cuenta recién cuando se aprueba, por el dev o sola. Las permanencias, sean pendientes, rechazadas o no entregadas, no bloquean. Lo que hace el usuario como dev tampoco bloquea ni afecta su calificación.
 
@@ -40,7 +40,8 @@ Es la regla sobre la que se sostiene la plataforma. Si una función permite salt
 
 1. ¿Permite subir una app sin cumplir las condiciones de la regla base? Entonces no se incluye.
 2. ¿Permite evitar la captura de permanencia sin que afecte la calificación? Entonces no se incluye.
-3. ¿Cambia cuánto o cómo se cumple, sin quitar ninguna obligación? Entonces se puede incluir.
+3. ¿Hace que un cambio de configuración afecte a una cuenta o a una app que ya empezó? Entonces se ajusta para que aplique solo a lo que empiece después (ver Cambios de configuración).
+4. ¿Cambia cuánto o cómo se cumple, sin quitar ninguna obligación? Entonces se puede incluir.
 
 ### Funciones de pago evaluadas
 
@@ -48,6 +49,21 @@ Es la regla sobre la que se sostiene la plataforma. Si una función permite salt
 | --- | --- | --- |
 | Apps adicionales, desde la tercera, con más postulantes (mínimo 15, hasta 20) | Sí | Cada app sigue requiriendo las dos condiciones de la regla base; el margen exige más testers y más validaciones al dev |
 | Reencolar una app Abandonada o Finalizada | Sí | Crea un registro nuevo en la cola y exige las dos condiciones de la regla base; pagar no las reemplaza |
+| Instalaciones requeridas distintas por plan | Sí, pero la debilita | Si el plan de pago exige menos, quien paga se lleva más testers y aporta menos: el pago reemplaza parte del aporte. Si exige más, castiga a quien paga. Lo recomendado es el mismo valor en ambos planes (ver Instalaciones requeridas por plan) |
+
+## Cambios de configuración
+
+Los parámetros (ver Parámetros configurables) se cambian en producción, sin deploy, para ajustar la cola con rapidez. Un cambio nunca afecta a lo que ya empezó: cada cuenta y cada app conservan los valores vigentes cuando empezaron, y el valor nuevo aplica solo a lo que empiece después. Esto vale también cuando el cambio favorece al usuario.
+
+| Valor | Queda fijado | Ejemplo |
+| --- | --- | --- |
+| Apps gratuitas en total | Al crear la cuenta | Un usuario creado con 2 apps gratuitas conserva 2, aunque el parámetro pase a 1 o a 3 |
+| Instalaciones requeridas | En cada envío a la cola, sea al subir una app o al reencolarla. Se fijan los valores de ambos planes (ver Instalaciones requeridas por plan) | Quien sube su app con 3 requeridas necesita 3 para su siguiente envío, aunque el parámetro pase a 5 o a 2 |
+| Mínimo y máximo de postulantes | Al enviar la app a la cola. Un regreso conserva los suyos; un registro reencolado toma los vigentes al reencolar | Una app subida con un mínimo de 12 necesita 12, aunque el parámetro pase a 13 mientras espera o vuelve como regreso |
+| Tiempo en el top | Al entrar al top (ver Cola y top) | Una app que entra al top con 72 h las conserva, aunque el parámetro baje a 24 h |
+| Retención de capturas | Al enviar cada captura | Una captura enviada con 90 días de retención se borra a los 90 días, aunque el parámetro baje a 60 |
+
+Para los demás parámetros falta verificar que un cambio no afecte a procesos en curso (ver Pendientes).
 
 ## Objetivos y alcance del MVP
 
@@ -64,10 +80,12 @@ El MVP busca que cada app consiga los testers comprometidos de su plan sin que l
 
 | Señal | Qué indica | Ajuste |
 | --- | --- | --- |
-| La cola crece semana a semana | Entran más apps de las que salen | Subir las instalaciones requeridas para subir la siguiente app. El efecto se ve en el siguiente ciclo de cada usuario, unas 3 semanas después, así que conviene ajustarlo con tiempo |
+| La cola crece semana a semana | Entran más apps de las que salen | Subir las instalaciones requeridas de ambos planes a la vez. El efecto se ve en el siguiente ciclo de cada usuario, unas 3 semanas después, así que conviene ajustarlo con tiempo |
 | Las apps del top se llenan en minutos y los testers no encuentran dónde postularse | Hay más testers que apps disponibles | Ampliar el top |
 | Los testers prefieren unirse a apps En progreso y las del top tardan más en llenarse | La ventana para postulantes adicionales le quita testers al top | Reducir la ventana para postulantes adicionales |
-| Suben las permanencias no entregadas o rechazadas | La calificación no alcanza para que los postulantes permanezcan | Subir el máximo de postulantes del plan gratuito, subir las instalaciones requeridas o volver a evaluar si la permanencia debe bloquear la siguiente app. El resultado en Google Play, cuando el dev lo informa, es un dato complementario |
+| Suben las permanencias no entregadas o rechazadas | La calificación no alcanza para que los postulantes permanezcan | Subir el máximo de postulantes del plan gratuito, subir las instalaciones requeridas de ambos planes o volver a evaluar si la permanencia debe bloquear la siguiente app. El resultado en Google Play, cuando el dev lo informa, es un dato complementario |
+
+Cada ajuste aplica solo a lo que empieza después del cambio (ver Cambios de configuración).
 
 ### Incluido en el MVP
 
@@ -337,7 +355,7 @@ Cumplir las instalaciones desbloquea la siguiente app. Cumplir las permanencias 
 
 | Compromiso del postulante | Plazo | Si no cumple |
 | --- | --- | --- |
-| Instalar: las capturas de instalación aprobadas requeridas en apps de otros (3 en el lanzamiento) | Desde que subió su app anterior, antes de subir la siguiente | No puede subir su siguiente app |
+| Instalar: las capturas de instalación aprobadas requeridas en apps de otros (3 en el lanzamiento) | Desde su último envío a la cola, antes del siguiente | No puede subir su siguiente app ni reencolar |
 | Permanencia | 48 h desde que se cumplen los 14 días | Cuenta como no cumplida en su calificación |
 
 Las tareas del dev no son compromisos: no cumplirlas no bloquea ni afecta su calificación.
@@ -354,13 +372,36 @@ Las tareas del dev no son compromisos: no cumplirlas no bloquea ni afecta su cal
 - Desde la segunda, el usuario sube su siguiente app al cumplir las dos condiciones de la regla base.
 - Instalar es obligatorio: cuentan las capturas de instalación del usuario como postulante, en apps de otros, aprobadas desde la última vez que envió una app a la cola, sea al subirla o al reencolarla. Las capturas pendientes no cuentan hasta que se aprueban; una que se aprueba después de un envío cuenta para el ciclo siguiente.
 - Cada envío a la cola cierra el ciclo: las instalaciones usadas no vuelven a contar y las que sobran no pasan al ciclo siguiente.
-- Las instalaciones requeridas se exigen desde la segunda app, en cada ciclo: 3 para la segunda, otras 3 para la tercera, y así. Son un parámetro por plan: para la segunda app rige el valor de las apps gratuitas y, desde la tercera, el de las apps de pago. Ambos empiezan en 3 y nunca bajan de 1, que es el mínimo de la regla base.
-- Cada vez que el usuario sube una app, queda fijado cuántas instalaciones necesitará para subir la siguiente. Si el parámetro cambia después, no le afecta: el nuevo valor le aplica recién desde la siguiente app que suba.
+- Las instalaciones requeridas se exigen en cada envío a la cola después del primero, sea una app nueva o un reencolado: 3 para el segundo envío, otras 3 para el tercero, y así. Cuántas se exigen depende de un parámetro por plan (ver Instalaciones requeridas por plan).
 - Las instalaciones aprobadas desbloquean la siguiente app sin esperar los 14 días. Las permanencias de esas postulaciones no bloquean, se cumplan o no.
 - La cadena aplica igual en el plan de pago: pagar quita el límite de cantidad, no las condiciones de la regla base.
 - Si una app termina Abandonada, sigue ocupando su espacio dentro del total de apps del dev, incluidas las 2 gratuitas. Reencolarla se paga y solo se puede una vez.
 - Si una app termina Ignorada, el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total. No se puede reencolar.
 - Si la app a la que se postuló termina Ignorada o Abandonada, el postulante no tiene permanencia pendiente, porque los 14 días nunca empezaron. Su instalación aprobada cuenta igual para su siguiente app.
+
+#### Instalaciones requeridas por plan
+
+Hay dos parámetros, uno por plan. Ambos empiezan en 3 y nunca bajan de 1, que es el mínimo de la regla base. Cuál rige depende de lo que el usuario envía a la cola:
+
+| Envío | Parámetro que rige |
+| --- | --- |
+| App nueva, si al usuario le quedan apps gratuitas | El del plan gratuito |
+| App nueva, si ya no le quedan apps gratuitas | El del plan de pago |
+| Reencolado | El del plan de pago, porque reencolar siempre se paga |
+
+**Lo recomendado es que ambos parámetros tengan el mismo valor.** Valores distintos debilitan la cadena de responsabilidad:
+
+| Si el valor del plan de pago es… | Qué pasa |
+| --- | --- |
+| Menor que el del gratuito | Quien paga se lleva más testers (hasta 20, contra 15 del plan gratuito) y aporta menos. El pago reemplaza parte del aporte, y la regla base dice que pagar no reemplaza sus condiciones |
+| Mayor que el del gratuito | Castiga a quien paga. Además, mientras le quedan apps gratuitas, el usuario elige entre subir una app nueva o reencolar según cuál le exige menos instalaciones |
+| Igual | Hay un solo número por ciclo, que no depende de lo que el usuario envíe después |
+
+Se mantienen dos parámetros para poder separarlos en producción, sin deploy, si los datos lo justifican.
+
+Cada envío a la cola fija los valores vigentes de ambos parámetros, porque en ese momento no se sabe si el siguiente envío será una app gratuita, una de pago o un reencolado. En el siguiente envío rige el valor fijado que corresponde. Si un parámetro cambia después, no le afecta: el valor nuevo le aplica desde el envío siguiente (ver Cambios de configuración). Con ambos parámetros iguales, es un solo número.
+
+Ejemplo: un usuario sube su primera app con ambos parámetros en 3. Una semana después, los dos pasan a 5. Para su segundo envío, sea su segunda app o reencolar la primera, necesita 3 instalaciones aprobadas. Al hacer ese envío quedan fijados 5 y 5 para el siguiente.
 
 ### Calificación
 
@@ -431,7 +472,7 @@ La plataforma avisa en cada etapa del proceso, por email y con notificaciones we
 
 ## Parámetros configurables
 
-Casi todas las reglas dependen de un parámetro. El valor inicial es el número con el que arranca el lanzamiento, y se ajusta con las señales de la cola.
+Casi todas las reglas dependen de un parámetro. El valor inicial es el número con el que arranca el lanzamiento, y se ajusta con las señales de la cola. Los parámetros se cambian en producción sin deploy, y un cambio no afecta a lo que ya empezó (ver Cambios de configuración).
 
 ### Cola
 
@@ -484,10 +525,12 @@ Casi todas las reglas dependen de un parámetro. El valor inicial es el número 
 | Parámetro | Tipo | Valores aceptados | Inicial |
 | --- | --- | --- | --- |
 | Apps gratuitas en total | Número | 1–10 | 2 |
-| Instalaciones aprobadas requeridas para subir una app gratuita, desde la app anterior | Número | 1–15 | 3 |
-| Instalaciones aprobadas requeridas para subir una app de pago, desde la app anterior | Número | 1–15 | 3 |
+| Instalaciones aprobadas requeridas para subir una app gratuita, desde el envío anterior | Número | 1–15 | 3 |
+| Instalaciones aprobadas requeridas para subir una app de pago o reencolar, desde el envío anterior | Número | 1–15 | 3 |
 | Apps activas a la vez por dev | Número | Fijo en 1 durante el MVP | 1 |
 | Grupos de Google | Opción | Solo el de la plataforma · Plataforma y propios | Solo el de la plataforma |
+
+Lo recomendado es que las instalaciones requeridas de ambos planes tengan el mismo valor: valores distintos debilitan la cadena de responsabilidad (ver Instalaciones requeridas por plan).
 
 El límite de una sola vez para reencolar una app Abandonada es fijo.
 
@@ -528,7 +571,7 @@ El MVP acepta varios riesgos a cambio de simplicidad y de no castigar a usuarios
 
 - Una captura puede mostrar el email, la foto o las notificaciones del postulante. La plataforma le pide recortar o tapar datos personales antes de enviarla.
 - Solo el dev de esa app ve las capturas. Los rechazos y reportes son públicos, pero sin sus capturas.
-- Todas las capturas (de instalación, de permanencia, de reportes y de Play Console) se borran 90 días después de enviarse, sin importar cómo termine la app.
+- Todas las capturas (de instalación, de permanencia, de reportes y de Play Console) se borran al cumplirse el plazo de retención, contado desde que se envía cada una: 90 días en el lanzamiento (ver Parámetros configurables). El plazo queda fijado al enviar la captura y no depende de cómo termine la app.
 
 ### Baja de usuarios
 
@@ -546,8 +589,7 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 
 ### Por decidir dentro del MVP
 
-- [ ] **Qué número de instalaciones se exige al reencolar:** el parámetro cambia según el número de app: la segunda usa el del plan gratuito y desde la tercera el del plan de pago. Un reencolado no es la "segunda" ni la "tercera" app. Propuesta: el del plan de pago, porque reencolar siempre se paga. Alternativa: un solo parámetro de instalaciones para todos los envíos a la cola desde el segundo, sea una app gratuita, una de pago o un reencolado.
-- [ ] **Qué número queda fijado al subir una app:** al subir una app queda fijado cuántas instalaciones necesitará el usuario para la siguiente, pero hay dos parámetros (gratuito y de pago) y en ese momento no se sabe si lo siguiente será una app gratuita, una de pago o un reencolado. Opciones: guardar los dos valores vigentes y usar en el próximo envío el que corresponda, o tener un solo parámetro para todos los envíos. Duda relacionada: con dos parámetros, quien paga podría tener que aportar más instalaciones que quien no paga.
+- [ ] **Verificar que los cambios a nivel de sistema no afecten a procesos en curso:** definir en qué momento queda fijado cada parámetro que todavía no figura en Cambios de configuración.
 - [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de los registros).
 
 ### Por decidir cerca del lanzamiento
