@@ -27,7 +27,7 @@ Toda función, gratuita o de pago, actual o futura, debe respetar la cadena de r
 
 La primera app no exige nada. Desde la segunda, para subir la siguiente app el usuario necesita:
 
-1. Que su app anterior ya no esté activa: Finalizada, Abandonada o Ignorada.
+1. Que su app anterior ya no esté activa: Finalizada o Ignorada.
 2. Las instalaciones aprobadas requeridas en apps de otros (3 en el lanzamiento) desde su último envío a la cola, sea al subir una app o al reencolarla.
 
 Una instalación pendiente todavía no cuenta para el desbloqueo: cuenta recién cuando se aprueba, por el dev o sola. Las permanencias, sean pendientes, rechazadas o no entregadas, no bloquean. Lo que hace el usuario como dev tampoco bloquea ni afecta su calificación.
@@ -48,7 +48,7 @@ Es la regla sobre la que se sostiene la plataforma. Si una función permite salt
 | Función | ¿Respeta la cadena? | Por qué |
 | --- | --- | --- |
 | Apps adicionales, desde la tercera, con más postulantes (mínimo 15, hasta 20) | Sí | Cada app sigue requiriendo las dos condiciones de la regla base; el margen exige más testers y más validaciones al dev |
-| Reencolar una app Abandonada o Finalizada | Sí | Crea un registro nuevo en la cola y exige las dos condiciones de la regla base; pagar no las reemplaza |
+| Reencolar una app Finalizada | Sí | Crea un registro nuevo en la cola y exige las dos condiciones de la regla base; pagar no las reemplaza |
 | Instalaciones requeridas distintas por plan | Sí, pero la debilita | Si el plan de pago exige menos, quien paga se lleva más testers y aporta menos: el pago reemplaza parte del aporte. Si exige más, castiga a quien paga. Lo recomendado es el mismo valor en ambos planes (ver Instalaciones requeridas por plan) |
 
 ## Cambios de configuración
@@ -85,6 +85,7 @@ El MVP busca que cada app consiga los testers comprometidos de su plan sin que l
 | Las apps del top se llenan en minutos y los testers no encuentran dónde postularse | Hay más testers que apps disponibles | Ampliar el top |
 | Los testers prefieren unirse a apps En progreso y las del top tardan más en llenarse | La ventana para postulantes adicionales le quita testers al top | Reducir la ventana para postulantes adicionales |
 | Suben las permanencias no entregadas o rechazadas | La calificación no alcanza para que los postulantes permanezcan | Subir el máximo de postulantes del plan gratuito, subir las instalaciones requeridas de ambos planes o volver a evaluar si la permanencia debe bloquear la siguiente app. El resultado en Google Play, cuando el dev lo informa, es un dato complementario |
+| Muchas apps reportadas agotan su tiempo en el top | Las apps que no funcionan ocupan lugares del top | Volver a evaluar qué hacer con las apps reportadas (ver Fuera del MVP) |
 
 Cada ajuste aplica solo a lo que empieza después del cambio (ver Cambios de configuración).
 
@@ -93,7 +94,7 @@ Cada ajuste aplica solo a lo que empieza después del cambio (ver Cambios de con
 - Cola con top, estados, tiempos límite y reportes de apps que no abren.
 - Postulaciones con capturas de instalación y de permanencia, validadas por el dev con aprobación automática.
 - Cadena de desbloqueo por instalaciones aprobadas y calificación visible de permanencias.
-- Rechazos y reportes públicos, sin sus capturas.
+- Rechazos y reportes públicos, sin sus capturas, y respuesta del dev a cada reporte.
 - Plan gratuito y pago por uso.
 - Notificaciones por email y web push en cada etapa.
 - Parámetros configurables.
@@ -129,8 +130,9 @@ La plataforma no usa la palabra "aplicación": el software es una **app** y la a
 | Cierre | El dev valida las permanencias de su app; si no lo hace, la plataforma la cierra al expirar su plazo |
 | Calificación | Cuántas permanencias cumplió el usuario como postulante, sobre todas las que se resolvieron |
 | Top | Las apps activas que pueden recibir postulaciones |
-| Regreso | Un registro que vuelve a Waiting como Insuficiente, Arreglada o Expirada. Es el mismo registro que cambia de estado |
-| Reencolar | Función de pago: crea un registro nuevo en la cola para una app Abandonada o Finalizada |
+| Regreso | Un registro que vuelve a Waiting como Insuficiente o Expirada. Es el mismo registro que cambia de estado |
+| Reencolar | Función de pago: crea un registro nuevo en la cola para una app Finalizada |
+| Reporte | Aviso público de que la app no le funciona a quien reporta, con un motivo. No cambia el estado de la app. El dev puede responderlo una vez |
 | Package name | El identificador de la app en Google Play, extraído de su link |
 
 Postularse es enviar la captura de instalación. No es un compromiso propio: queda incluido en las instalaciones requeridas.
@@ -146,29 +148,27 @@ La plataforma equilibra dos sistemas para que la cola avance. **Confianza** es l
 | El postulante elige a qué apps postularse | El top limita cuántas apps compiten por testers al mismo tiempo |
 | El dev declara que su app está disponible en todos los países | Tiempo límite en el top |
 | El dev confirma que está en el grupo de Google y que su test cerrado usa los grupos de su app | Rechazos y reportes públicos |
-| El dev indica que arregló una app pausada | Pausa automática por reportes |
-| El dev informa su resultado en Google Play | Cierre automático al expirar el plazo del dev para validar las permanencias |
-| Cada usuario decide si confía en otro según su calificación | Pago para reencolar una app Abandonada o Finalizada |
+| El dev responde a cada reporte | Cierre automático al expirar el plazo del dev para validar las permanencias |
+| El dev informa su resultado en Google Play | Pago para reencolar una app Finalizada |
+| Cada usuario decide si confía en otro según su calificación | |
+| Cada postulante decide si se postula a una app reportada | |
 | Las instalaciones aprobadas desbloquean la siguiente app sin esperar las permanencias | |
 | Cada postulante decide si permanece; su calificación lo muestra | |
 
 ## Flujo y estados de una app
 
-Una app avanza en línea recta de la cola al cierre, salvo cuando expira su tiempo en el top, queda Insuficiente o recibe suficientes reportes. En esos casos vuelve a la cola como regreso, con un límite de veces, o termina Ignorada o Abandonada (ver Regresos).
+Una app avanza en línea recta de la cola al cierre, salvo cuando expira su tiempo en el top o queda Insuficiente. En esos casos vuelve a la cola como regreso, con un límite de veces, o termina Ignorada (ver Regresos). Los reportes no cambian su estado (ver Reportes).
 
 | Estado | Qué pasa |
 | --- | --- |
 | En espera | Aguarda su turno; aparece en la cola si está entre las 20 próximas |
 | En el top | Recibe postulaciones durante su tiempo límite y puede ser reportada |
-| En progreso | Recibió el mínimo de capturas de su plan (12 o 15). Dura como máximo 24 h: el dev valida las capturas y, durante las primeras 12 h, acepta postulantes adicionales hasta el máximo (15 o 20) |
+| En progreso | Recibió el mínimo de capturas de su plan (12 o 15). Dura como máximo 24 h: el dev valida las capturas y, durante las primeras 12 h, acepta postulantes adicionales hasta el máximo (15 o 20) y puede ser reportada |
 | Insuficiente | Terminó la ventana de postulantes adicionales, no quedan capturas pendientes y las aprobadas no llegan al mínimo; vuelve a la cola conservando sus aprobadas |
 | Expirada | Se le acabó el tiempo en el top antes de recibir el mínimo de postulaciones; vuelve a la cola con sus postulantes |
-| Arreglada | El dev indicó que arregló su app pausada; vuelve a la cola con sus postulantes |
 | En prueba | Las capturas aprobadas llegaron al mínimo; nadie más puede unirse y corren los 14 días |
 | Por cerrar | Desde que se cumplen los 14 días: los postulantes tienen 48 h para enviar su captura de permanencia y luego el dev tiene 24 h para validarlas |
 | Finalizada | No queda ninguna permanencia por entregar ni por validar, porque el dev las validó o porque expiraron los plazos; el dev queda libre para su siguiente app |
-| Pausada | Recibió suficientes reportes mientras estaba en el top; espera que el dev la arregle, como máximo 7 días |
-| Abandonada | No se arregló a tiempo, o se pausó otra vez después de agotar sus regresos como Arreglada; el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total de apps. Se puede reencolar una vez, pagando |
 | Ignorada | Se le acabó el tiempo en el top por segunda vez, o quedó Insuficiente otra vez después de agotar sus regresos; el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total de apps. No se puede reencolar |
 
 ### Diagrama de estados
@@ -186,20 +186,14 @@ stateDiagram-v2
     EnElTop --> EnProgreso: Recibe el mínimo de postulaciones
     EnElTop --> Expirada: Se acaba el tiempo por primera vez
     EnElTop --> Ignorada: Se acaba el tiempo por segunda vez
-    EnElTop --> Pausada: Reportes
-    EnElTop --> Abandonada: Reportes tras agotar sus regresos como Arreglada
     EnProgreso --> EnPrueba: Las aprobadas llegan al mínimo
     EnProgreso --> Insuficiente: Ventana cerrada, sin pendientes y bajo el mínimo
     EnProgreso --> Ignorada: Insuficiente tras agotar sus regresos
     Insuficiente --> EnElTop: Le toca el turno
     Expirada --> EnElTop: Le toca el turno
-    Pausada --> Arreglada: El dev la arregla
-    Pausada --> Abandonada: 7 días sin arreglar
-    Arreglada --> EnElTop: Le toca el turno
     EnPrueba --> PorCerrar: Día 14
     PorCerrar --> Finalizada: No quedan permanencias por entregar ni por validar
     Finalizada --> [*]
-    Abandonada --> [*]
     Ignorada --> [*]
 ```
 
@@ -213,16 +207,16 @@ La cola se muestra en tres partes, y cada una agrupa uno o más estados internos
 | --- | --- |
 | Top | En el top |
 | In progress | En progreso, solo durante su ventana de 12 h para postulantes adicionales |
-| Waiting | En espera, Insuficiente, Arreglada y Expirada |
+| Waiting | En espera, Insuficiente y Expirada |
 
-- Waiting muestra sus estados juntos, sin diferencia visual entre apps nuevas y regresos. Solo cambia el orden: primero las Insuficiente, luego las Arreglada y al final las nuevas y las Expirada, mezcladas.
+- Waiting muestra sus estados juntos, sin diferencia visual entre apps nuevas y regresos. Solo cambia el orden: primero las Insuficiente y después las nuevas y las Expirada, mezcladas.
 - Dentro de cada grupo, las apps se ordenan por fecha de entrada a la cola: la de subida para una app nueva, la de reencolado para un registro reencolado y la de vuelta a la cola para un regreso.
 - Una app En progreso deja de mostrarse al cerrarse su ventana de 12 h, aunque el dev siga validando.
-- Las apps En prueba, Por cerrar, Pausada, Finalizada, Abandonada e Ignorada no se muestran en la cola; el dev y sus postulantes las siguen viendo en sus apps y en sus pruebas.
+- Las apps En prueba, Por cerrar, Finalizada e Ignorada no se muestran en la cola; el dev y sus postulantes las siguen viendo en sus apps y en sus pruebas.
 
 ### Historial de estados
 
-Cada registro en la cola guarda el historial de sus transiciones: estado de origen, estado de destino, fecha y hora, y causa (acción del dev, expiración de un plazo, reportes o aprobación automática). También registra cómo se resolvió cada captura: por el dev o sola.
+Cada registro en la cola guarda el historial de sus transiciones: estado de origen, estado de destino, fecha y hora, y causa (acción del dev, expiración de un plazo o aprobación automática). También registra cómo se resolvió cada captura: por el dev o sola.
 
 - Lo ven el dev de la app y el panel de administración; no es público.
 - De él salen los conteos de regresos y expiraciones, los datos sobre cómo terminó cada prueba y la evidencia para decidir reembolsos.
@@ -241,13 +235,12 @@ Cada dev tiene una sola app activa a la vez, que avanza según su turno en la co
 - Si la app tiene un grupo propio, la plataforma muestra su enlace y el postulante se une a él antes de instalar.
 - Una vez subida, el dev no puede retirar la app ni cambiar su link de Google Play. Un link incorrecto es responsabilidad del dev.
 - La primera app entra sin requisitos. Las siguientes dependen de la cadena de desbloqueo (ver Compromisos).
-- Una app activa a la vez por dev, en plan gratuito y de pago. Una app deja de estar activa al llegar a Finalizada, Abandonada o Ignorada. Al reencolarse, vuelve a estar activa hasta que su registro nuevo llegue a uno de esos estados.
+- Una app activa a la vez por dev, en plan gratuito y de pago. Una app deja de estar activa al llegar a Finalizada o Ignorada. Al reencolarse, vuelve a estar activa hasta que su registro nuevo llegue a uno de esos estados.
 - La pantalla de subida muestra el aviso de que la plataforma no garantiza el acceso a producción.
-- Una app Abandonada se puede reencolar una sola vez, pagando. El límite es por app: si vuelve a quedar Abandonada, ya no se puede reencolar, aunque entre medio haya quedado Finalizada.
 - Una app Finalizada se puede reencolar pagando, sin límite; por ejemplo, si Google pidió otra prueba cerrada antes de dar acceso a producción.
 - Una app Ignorada no se puede reencolar, ni pagando.
 - Una app que nunca se subió sigue las reglas normales: es gratuita si al usuario le quedan apps gratuitas.
-- Reencolar crea un registro nuevo en la cola: empieza sin postulantes y con el conteo de reportes en cero, y los reportes de sus registros anteriores siguen siendo públicos. En Waiting aparece como una app nueva.
+- Reencolar crea un registro nuevo en la cola: empieza sin postulantes ni reportes, y los reportes de sus registros anteriores siguen siendo públicos. En Waiting aparece como una app nueva.
 - Reencolar exige las dos condiciones de la regla base. Las instalaciones requeridas siguen la misma regla que al subir una app nueva: reencolar no tiene parámetros propios.
 - Reencolar no ocupa otro espacio en el total de apps del dev: la app ocupa uno solo, tenga uno o varios registros. El registro nuevo sí ocupa su lugar en la cola y recibe el mínimo y el máximo del plan de pago.
 - Solo la cuenta dueña del package name puede reencolar la app.
@@ -278,14 +271,13 @@ Un regreso es el mismo registro que vuelve a Waiting: conserva lo que ya consigu
 | Regreso | Qué conserva | Tiempo en el top al volver | Límite |
 | --- | --- | --- | --- |
 | Insuficiente | Sus capturas aprobadas; las rechazadas no cuentan | 6 h | 2 regresos; si queda Insuficiente una tercera vez, pasa a Ignorada |
-| Arreglada | Todos sus postulantes | El normal | 2 regresos; si se pausa una tercera vez, pasa a Abandonada sin esperar los 7 días |
 | Expirada | Todos sus postulantes, incluidas las capturas pendientes, que se siguen aprobando solas | 12 h | 1 regreso; la segunda expiración la deja Ignorada |
 
 - Las expiraciones se cuentan por registro en la cola, sin importar de dónde venga la app: la primera vez que se le acaba el tiempo en el top, sea nueva o un regreso, pasa a Expirada; la segunda, a Ignorada.
 - Cada tipo de regreso tiene su propio contador.
 - Al volver a llegar a su mínimo, el regreso pasa otra vez por En progreso con las mismas reglas: 24 h en total y 12 h para postulantes adicionales.
-- Una app Arreglada vuelve con el conteo de reportes para pausar en cero. Los reportes anteriores siguen siendo públicos y quedan en su historial.
-- Los tiempos y los límites de Insuficiente y Arreglada son parámetros (ver Parámetros configurables). El regreso único de Expirada es fijo.
+- Un regreso conserva sus reportes y las respuestas del dev, que siguen visibles al volver al top.
+- El tiempo y el límite de Insuficiente son parámetros (ver Parámetros configurables). El regreso único de Expirada es fijo.
 
 ### Postulaciones y capturas
 
@@ -325,28 +317,26 @@ El cierre tiene dos partes:
 - Cerrar es una obligación del dev, pero no cumplirla no tiene consecuencias para él: la plataforma la cierra.
 - La captura de Play Console, que muestra si se cumplió el requisito del test cerrado, y el resultado en Google Play (aprobada o rechazada, y si el rechazo tuvo que ver con los testers) son opcionales e informativos. El dev los puede informar cuando quiera, incluso después de que la app se finalizó.
 
-### Reportes de "no abre" o "no disponible"
+### Reportes
 
-- Cualquier usuario puede reportar una app, pero solo mientras está en el top. Cada reporte lleva captura, un motivo (no abre, no disponible en mi país, pide login, se cierra o no puedo unirme a su grupo de Google) y una justificación escrita de 30 a 280 caracteres.
-- La app se pausa cuando recibe **al menos 3 reportes de cuentas distintas** y esos reportes son **más del 50%** de los usuarios que interactuaron con ella (postulaciones más reportes).
+Un reporte avisa a los demás usuarios que la app no le funciona a quien reporta. Es informativo: no cambia el estado de la app ni la saca del top. Cada usuario decide si se postula a una app reportada, igual que decide según la calificación del dev. Así la plataforma no tiene que decidir quién tiene razón, y ninguna app sale del top por reportes injustos. Si los usuarios no se postulan, la app sale al vencerse su tiempo en el top.
 
-| Reportes | Postulaciones | % de reportes | ¿Se pausa? |
-| --- | --- | --- | --- |
-| 2 | 0 | 100% | No: no llega al mínimo de 3 |
-| 3 | 2 | 60% | Sí |
-| 3 | 12 | 20% | No: funciona para casi todos |
-| 6 | 5 | 55% | Sí |
-
-- Cuando el dev indica que la arregló, la app pasa a Arreglada y vuelve a la cola con sus postulantes, sin verificación automática (ver Regresos).
-- Si no la arregla en 7 días, o si se pausa otra vez después de agotar sus regresos como Arreglada, pasa a Abandonada: sigue ocupando su espacio dentro del total de apps del dev, y reencolarla se paga y solo se puede una vez.
-- Los reportes no se pueden apelar en el MVP.
+- Cualquier usuario puede reportar una app mientras se puede postular a ella: en el top y durante las primeras 12 h de En progreso. También puede hacerlo quien ya se postuló. El dev no puede reportar su propia app.
+- Cada usuario reporta una sola vez por registro en la cola.
+- Cada reporte lleva un motivo (no abre, no disponible en mi país, pide login, se cierra o no puedo unirme a su grupo de Google), una justificación escrita de 30 a 280 caracteres y, de forma opcional, una captura.
+- El dev puede responder cada reporte una sola vez, con una justificación del mismo largo, mientras su app puede recibir reportes: en el top y durante las primeras 12 h de En progreso. Así puede indicar, por ejemplo, que ya la arregló.
+- Un reporte y su respuesta no se pueden editar ni borrar.
+- Los reportes no afectan la calificación de nadie: ni la de quien reporta ni la del dev.
+- La cola muestra junto a cada app cuántos reportes tiene. La ficha de la app muestra cada reporte con su respuesta.
+- Los reportes son del registro en la cola: un regreso los conserva y un registro reencolado empieza sin reportes.
+- Qué hacer con las apps reportadas, por ejemplo pausarlas, queda fuera del MVP (ver Fuera del MVP).
 
 ### Transparencia de rechazos y reportes
 
 Los rechazos y los reportes son públicos, para que cada usuario pueda juzgar a los demás por lo que hacen. Se muestra todo lo que no comprometa a nadie: nunca las capturas.
 
 - Todos los que participan en la prueba de una app ven los rechazos del dev: a qué postulante, el tipo de captura, el motivo y la justificación.
-- Los reportes de una app son públicos: quién reportó, el motivo y la justificación.
+- Los reportes de una app son públicos: quién reportó, el motivo, la justificación y la respuesta del dev.
 - El perfil de cada usuario muestra los rechazos que hizo como dev y los que recibió como postulante.
 
 ## Compromisos, desbloqueo y calificación
@@ -377,9 +367,8 @@ Las tareas del dev no son compromisos: no cumplirlas no bloquea ni afecta su cal
 - Las instalaciones requeridas se exigen en cada envío a la cola después del primero, sea una app nueva o un reencolado: 3 para el segundo envío, otras 3 para el tercero, y así. Cuántas se exigen depende de un parámetro por plan (ver Instalaciones requeridas por plan).
 - Las instalaciones aprobadas desbloquean la siguiente app sin esperar los 14 días. Las permanencias de esas postulaciones no bloquean, se cumplan o no.
 - La cadena aplica igual en el plan de pago: pagar quita el límite de cantidad, no las condiciones de la regla base.
-- Si una app termina Abandonada, sigue ocupando su espacio dentro del total de apps del dev, incluidas las 2 gratuitas. Reencolarla se paga y solo se puede una vez.
-- Si una app termina Ignorada, el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total. No se puede reencolar.
-- Si la app a la que se postuló termina Ignorada o Abandonada, el postulante no tiene permanencia pendiente, porque los 14 días nunca empezaron. Su instalación aprobada cuenta igual para su siguiente app.
+- Si una app termina Ignorada, el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total, incluidas las 2 gratuitas. No se puede reencolar.
+- Si la app a la que se postuló termina Ignorada, el postulante no tiene permanencia pendiente, porque los 14 días nunca empezaron. Su instalación aprobada cuenta igual para su siguiente app.
 
 #### Instalaciones requeridas por plan
 
@@ -430,9 +419,9 @@ El modelo es de pago por uso, sin suscripción: se paga por cada app después de
 
 Las 2 primeras apps de cada usuario son siempre gratuitas, para facilitar la entrada; no se puede pagar al subirlas para obtener el margen del plan de pago. Desde la tercera, cada app se paga e incluye el mínimo y el máximo del plan de pago: no son compras separadas. Su margen extra de postulantes reduce el riesgo de quedar por debajo de los 12 testers que exige Google si alguno abandona.
 
-Una app Abandonada o Ignorada sigue ocupando su espacio dentro de ese total. Si era gratuita, consumió una de las 2 gratuitas.
+Una app Ignorada sigue ocupando su espacio dentro de ese total. Si era gratuita, consumió una de las 2 gratuitas.
 
-Reencolar una app Abandonada o Finalizada se paga siempre, al mismo precio que una app de pago, aunque al usuario le queden apps gratuitas. No ocupa otro espacio en su total. El registro nuevo recibe el mínimo y el máximo del plan de pago.
+Reencolar una app Finalizada se paga siempre, al mismo precio que una app de pago, aunque al usuario le queden apps gratuitas. No ocupa otro espacio en su total. El registro nuevo recibe el mínimo y el máximo del plan de pago.
 
 ### Reembolsos
 
@@ -453,12 +442,14 @@ La plataforma avisa en cada etapa del proceso, por email y con notificaciones we
 | A 3 posiciones del top | Dev | "Estás a 3 posiciones del top" |
 | Entra al top | Dev | "Tu app está en el top y ya recibe postulaciones" |
 | Recibe postulaciones | Dev | "Tienes 4 capturas por validar" |
+| Recibe un reporte | Dev | "Tu app recibió un reporte: no abre" |
+| El dev responde un reporte | Usuario que reportó | "El dev respondió tu reporte" |
 | 6 h antes de que las capturas de instalación se aprueben solas | Dev | "Tus capturas se aprueban solas en 6 h" |
 | Expira el tiempo en el top | Dev | "Tu app volvió a la cola con sus postulantes" |
 | Pasa a En progreso | Dev | "Alcanzaste tu mínimo de postulantes: valida sus capturas" |
 | Pasa a En prueba | Dev y postulantes | "Se aprobó el mínimo de capturas: empiezan los 14 días" |
 | Pasa a Insuficiente | Dev | "Tu app no llegó al mínimo de capturas aprobadas" |
-| Vuelve a la cola como Insuficiente o Arreglada | Dev | "Tu app volvió a la cola en la posición 3" |
+| Vuelve a la cola como Insuficiente | Dev | "Tu app volvió a la cola en la posición 3" |
 | Captura aprobada o rechazada | Postulante | "Rechazaron tu captura: no se ve la app instalada" |
 | Se abre la ventana de permanencia | Postulante | "Hoy toca tu captura de permanencia: tienes 48 h para enviarla" |
 | 12 h antes de que se cierre la ventana de permanencia | Postulante | "Te quedan 12 h para enviar tu captura de permanencia" |
@@ -466,10 +457,8 @@ La plataforma avisa en cada etapa del proceso, por email y con notificaciones we
 | Se cierra la ventana de permanencia | Dev | "Tienes 24 h para validar las permanencias de tu app" |
 | 6 h antes de que las permanencias se aprueben solas | Dev | "Tus permanencias se aprueban solas en 6 h" |
 | Pasa a Finalizada | Dev | "Tu app se cerró. Ya puedes informar cómo te fue en Google Play" |
-| App pausada por reportes | Dev | "Tu app se pausó: varios usuarios no pueden abrirla" |
-| Pasa a Abandonada | Dev | "Tu app quedó abandonada. Puedes reencolarla una vez, pagando" o, si ya se reencoló desde Abandonada, "Tu app quedó abandonada y ya no se puede reencolar" |
 | Pasa a Ignorada | Dev | "Tu app no consiguió su mínimo de postulantes y quedó ignorada" |
-| Pasa a Ignorada o Abandonada | Postulantes | "Tu instalación cuenta para tu siguiente app; no tienes permanencia pendiente" |
+| Pasa a Ignorada | Postulantes | "Tu instalación cuenta para tu siguiente app; no tienes permanencia pendiente" |
 | Siguiente app desbloqueada | Usuario | "Ya puedes subir tu siguiente app" |
 
 ## Parámetros configurables
@@ -488,10 +477,8 @@ Casi todas las reglas dependen de un parámetro. El valor inicial es el número 
 | Máximo de postulantes, plan de pago | Número | Desde su mínimo hasta 30 | 20 |
 | Tiempo en el top | Horas | 12–168 | 72 (luego 24) |
 | Tiempo en el top al volver como Insuficiente | Horas | 1–24 | 6 |
-| Tiempo en el top al volver como Arreglada | Horas | 12–168 | Igual al tiempo en el top |
 | Tiempo en el top al volver como Expirada | Horas | 1–24 | 12 |
 | Regresos a la cola como Insuficiente | Número | 0–5 | 2 |
-| Regresos a la cola como Arreglada | Número | 0–5 | 2 |
 | Ventana para postulantes adicionales | Horas desde que la app entra En progreso | Menor que el plazo del dev para validar | 12 |
 
 ### Capturas y validación
@@ -502,17 +489,9 @@ Casi todas las reglas dependen de un parámetro. El valor inicial es el número 
 | Recordatorio antes de la aprobación automática | Horas antes | 1–12 | 6 |
 | Ventana para la captura de permanencia | Horas desde que se cumplen los 14 días | 24–96 | 48 |
 | Aviso antes de que se cierre la ventana de permanencia | Horas antes | 1–24 | 12 |
-| Justificación de rechazos y reportes: mínimo | Caracteres | 10–100 | 30 |
-| Justificación de rechazos y reportes: máximo | Caracteres | 100–500 | 280 |
+| Justificación de rechazos, reportes y respuestas: mínimo | Caracteres | 10–100 | 30 |
+| Justificación de rechazos, reportes y respuestas: máximo | Caracteres | 100–500 | 280 |
 | Retención de capturas | Días desde que se envía cada captura | 30–365 | 90 |
-
-### Reportes
-
-| Parámetro | Tipo | Valores aceptados | Inicial |
-| --- | --- | --- | --- |
-| Mínimo de reportes de cuentas distintas | Número | 2–10 | 3 |
-| Porcentaje de reportes para pausar | % | 30–90 | Más del 50 |
-| Días para arreglar una app pausada | Días | 1–30 | 7 |
 
 ### Avisos de posición
 
@@ -532,8 +511,6 @@ Casi todas las reglas dependen de un parámetro. El valor inicial es el número 
 | Grupo de Google propio por app | Feature flag | Activo · Inactivo | Inactivo |
 
 Lo recomendado es que las instalaciones requeridas de ambos planes tengan el mismo valor: valores distintos debilitan la cadena de responsabilidad (ver Instalaciones requeridas por plan).
-
-El límite de una sola vez para reencolar una app Abandonada es fijo.
 
 ## Riesgos asumidos, privacidad y avisos
 
@@ -556,12 +533,12 @@ El MVP acepta varios riesgos a cambio de simplicidad y de no castigar a usuarios
 | El dev no puede actuar según la calificación del postulante | El rechazo se basa en la captura, nunca en la calificación | La calificación sirve del lado del postulante, que elige a qué devs ayudar |
 | Una permanencia no cumplida queda para siempre en la calificación | La calificación cubre todo el historial | Ventana de 48 h y aviso antes de que se cierre |
 | Al lanzamiento, todos los usuarios muestran "Nuevo" durante las primeras semanas | La primera permanencia se resuelve recién después de los 14 días | Se deja de ser "Nuevo" con la primera permanencia resuelta |
-| Reportes falsos o malintencionados | Cualquiera puede reportar y no hay apelación en el MVP | Mínimo de 3 cuentas distintas y más del 50%; los reportes son públicos |
-| Disponibilidad por país declarada sin verificar | No se puede validar de forma automática | Reportes y pausa automática |
-| Grupo de Google confirmado sin verificar | No hay conexión con Google Play | Reportes y pausa automática |
-| Link de Google Play incorrecto | No se puede corregir después de subir la app; es responsabilidad del dev | Reportes y pausa automática |
+| Reportes falsos o malintencionados | Cualquiera puede reportar | Los reportes no sacan a la app del top; son públicos y el dev puede responder cada uno |
+| Una app que no funciona ocupa un lugar del top hasta que se vence su tiempo | Sacar apps del top por reportes obliga a la plataforma a decidir quién tiene razón | Reportes públicos; tiempo límite en el top; señal para volver a evaluar (ver Señales para ajustar la cola) |
+| Disponibilidad por país declarada sin verificar | No se puede validar de forma automática | Reportes públicos |
+| Grupo de Google confirmado sin verificar | No hay conexión con Google Play | Reportes públicos |
+| Link de Google Play incorrecto | No se puede corregir después de subir la app; es responsabilidad del dev | Reportes públicos |
 | Postulantes que salen del test antes del día 14 | No hay conexión con Google Play ni forma de detectarlo | Captura de permanencia y su rechazo por el dev |
-| Una app pausada vuelve sin estar arreglada | La apelación no se puede verificar | Si sigue fallando, los nuevos reportes la pausan otra vez; después de 2 regresos, la siguiente pausa la deja Abandonada |
 | Una persona con varias cuentas | Verificar identidad queda fuera del MVP | Package name único y calificación |
 | Un dev que abandona la plataforma | No hay forma de obligarlo a volver | Aprobación automática y cierre automático |
 | Participación mínima: abrir la app solo para la captura | Las capturas prueban que se abrió, no que se usó | Aviso de que no se garantiza la aprobación de Google |
@@ -600,40 +577,36 @@ El costo de cerrar un parámetro es lo que se mueve en el resto de la plataforma
 
 ### Resolver antes del MVP
 
-Están aquí porque aparecen en las señales para ajustar la cola (filas 1 y 2) o porque siempre hay algo en curso que el cambio dañaría sin vuelta atrás (filas 3 a 5). El mínimo de reportes y el porcentaje para pausar también se resuelven antes del MVP, pero quedan como punto abierto (ver Notas).
+Están aquí porque aparecen en las señales para ajustar la cola (filas 1 y 2) o porque siempre hay algo en curso que el cambio dañaría sin vuelta atrás (filas 3 a 5).
 
 | # | Parámetro | Qué pasa si cambia sin regla | Queda fijado | Costo | Efectos secundarios |
 | --- | --- | --- | --- | --- | --- |
 | 1 | Tamaño del top | Si baja de 5 a 3 con 5 apps en el top, no está claro si 2 salen antes de tiempo | Aplica de inmediato y no saca a ninguna app: las que están en el top se quedan hasta salir por sus reglas, y no entra ninguna nueva hasta que queden menos que el nuevo tamaño. Si sube, entran apps de inmediato | Medio | Si baja, el top muestra más apps que el nuevo tamaño hasta que salgan, y Waiting no avanza mientras tanto. Si sube, varias apps entran juntas: empiezan su tiempo en el top a la vez y se envían en bloque los avisos de entrada al top y los de posición de las apps que avanzan en Waiting |
 | 2 | Ventana para postulantes adicionales | Si baja de 12 h a 6 h en la hora 8, la ventana se cierra en el acto | Al entrar En progreso, junto con el plazo del dev de ese estado, para que la ventana siga siendo menor que el plazo | Alto | Arrastra al plazo del dev, que se fija en el mismo momento. El panel debe impedir un plazo del dev menor o igual a la ventana. Abre una decisión sobre los regresos (ver Notas) |
-| 3 | Plazo del dev para validar, en las capturas de instalación | Si baja, las capturas se aprueban solas antes de lo anunciado; si sube, el postulante espera más | Al enviar cada captura. En En progreso, al entrar en ese estado, porque el límite es único | Medio | El mismo parámetro queda fijado en tres momentos: al enviar cada captura, al entrar En progreso y, para las permanencias, al pasar a En prueba (fila 4). El recordatorio (fila 9) debe seguir siendo menor que el plazo. Decide cuándo se aprueba una instalación y, con eso, si cuenta para el ciclo actual del postulante o para el siguiente |
+| 3 | Plazo del dev para validar, en las capturas de instalación | Si baja, las capturas se aprueban solas antes de lo anunciado; si sube, el postulante espera más | Al enviar cada captura. En En progreso, al entrar en ese estado, porque el límite es único | Medio | El mismo parámetro queda fijado en tres momentos: al enviar cada captura, al entrar En progreso y, para las permanencias, al pasar a En prueba (fila 4). El recordatorio (fila 8) debe seguir siendo menor que el plazo. Decide cuándo se aprueba una instalación y, con eso, si cuenta para el ciclo actual del postulante o para el siguiente |
 | 4 | Plazo del dev para validar, en las capturas de permanencia | Cambia la fecha de cierre que ya se le mostró al dev | Al pasar a En prueba, junto con la fecha de cierre (ver Postulaciones y capturas) | Bajo | Ninguno: la fecha de cierre ya se calcula al pasar a En prueba con los valores vigentes |
-| 5 | Ventana para la captura de permanencia | Si baja de 48 h a 24 h, quien pensaba enviarla en la hora 30 queda como no cumplida en su calificación | Al pasar a En prueba, igual para todos los postulantes de la app | Bajo | Se fija junto con la fecha de cierre (fila 4). El aviso antes del cierre (fila 10) debe seguir siendo menor que la ventana; si son iguales, coincide con el aviso de apertura |
+| 5 | Ventana para la captura de permanencia | Si baja de 48 h a 24 h, quien pensaba enviarla en la hora 30 queda como no cumplida en su calificación | Al pasar a En prueba, igual para todos los postulantes de la app | Bajo | Se fija junto con la fecha de cierre (fila 4). El aviso antes del cierre (fila 9) debe seguir siendo menor que la ventana; si son iguales, coincide con el aviso de apertura |
 
 ### Pueden esperar
 
-Ninguno aparece en las señales para ajustar la cola. Si cambian, el daño es menor; los que no tienen ese margen (filas 7, 8 y 12) quedan fijos durante el MVP.
+Ninguno aparece en las señales para ajustar la cola. Si cambian, el daño es menor; el que no tiene ese margen (fila 7) queda fijo durante el MVP.
 
 | # | Parámetro | Qué pasa si cambia sin regla | Queda fijado | Costo | Efectos secundarios |
 | --- | --- | --- | --- | --- | --- |
-| 6 | Apps visibles en la cola | Si pasa de 20 a 30, aparecen 10 apps de golpe y no está claro si reciben el aviso | Aplica de inmediato, porque solo cambia lo que se muestra. Los avisos no se envían de forma retroactiva y cada uno se envía una sola vez por paso por Waiting | Bajo | Mueve el umbral del aviso de cercanía a la lista visible (fila 13), que se cuenta desde el final de la lista. Depende del aviso único de posición (ver Notas) |
+| 6 | Apps visibles en la cola | Si pasa de 20 a 30, aparecen 10 apps de golpe y no está claro si reciben el aviso | Aplica de inmediato, porque solo cambia lo que se muestra. Los avisos no se envían de forma retroactiva y cada uno se envía una sola vez por paso por Waiting | Bajo | Mueve el umbral del aviso de cercanía a la lista visible (fila 11), que se cuenta desde el final de la lista. Depende del aviso único de posición (ver Notas) |
 | 7 | Regresos a la cola como Insuficiente | Si el límite baja de 2 a 1, un registro que ya usó un regreso pasa a Ignorada en el siguiente, aunque al entrar tenía 2 | Al enviar la app a la cola, igual que el mínimo y el máximo de postulantes. Un regreso conserva el suyo; un registro reencolado toma el vigente | Bajo | Ninguno: se guarda junto con el mínimo y el máximo de postulantes |
-| 8 | Regresos a la cola como Arreglada | Igual al anterior, pero la app pasa a Abandonada | Al enviar la app a la cola, igual que el anterior | Bajo | Igual que el anterior |
-| 9 | Recordatorio antes de la aprobación automática | El aviso al dev se salta o se repite | Junto con el plazo al que recuerda: al enviar cada captura, al entrar En progreso o al pasar a En prueba | Bajo | Se fija en los mismos momentos que el plazo del dev (filas 3 y 4) y debe seguir siendo menor que ese plazo |
-| 10 | Aviso antes de que se cierre la ventana de permanencia | El aviso al postulante se salta o se repite | Al pasar a En prueba, junto con la ventana de permanencia | Bajo | Se fija junto con la ventana de permanencia (fila 5) y debe seguir siendo menor que ella |
-| 11 | Justificación de rechazos y reportes: mínimo y máximo | Un texto a medio escribir deja de ser válido al enviarlo; los ya publicados podrían quedar fuera de rango | Al enviar el rechazo o el reporte. Los ya publicados no se vuelven a validar | Bajo | Ninguno al fijarlo. Un solo parámetro sirve para rechazos y reportes: un cambio afecta a los dos |
-| 12 | Días para arreglar una app pausada | Si baja de 7 a 3 en el día 5, la app pasa a Abandonada en el acto | Al pasar a Pausada | Bajo | Ninguno. Por su costo, se puede adelantar al MVP |
-| 13 | Aviso de cercanía a la lista visible | Avisos que se repiten o que no llegan | Aplica de inmediato, sin envíos retroactivos y con un solo aviso por paso por Waiting | Bajo | Depende del aviso único de posición (ver Notas) y de las apps visibles en la cola (fila 6) |
-| 14 | Aviso de cercanía al top | Igual al anterior | Igual al anterior | Bajo | Depende del aviso único de posición. Un cambio en el tamaño del top (fila 1) también mueve las posiciones |
+| 8 | Recordatorio antes de la aprobación automática | El aviso al dev se salta o se repite | Junto con el plazo al que recuerda: al enviar cada captura, al entrar En progreso o al pasar a En prueba | Bajo | Se fija en los mismos momentos que el plazo del dev (filas 3 y 4) y debe seguir siendo menor que ese plazo |
+| 9 | Aviso antes de que se cierre la ventana de permanencia | El aviso al postulante se salta o se repite | Al pasar a En prueba, junto con la ventana de permanencia | Bajo | Se fija junto con la ventana de permanencia (fila 5) y debe seguir siendo menor que ella |
+| 10 | Justificación de rechazos, reportes y respuestas: mínimo y máximo | Un texto a medio escribir deja de ser válido al enviarlo; los ya publicados podrían quedar fuera de rango | Al enviar el rechazo, el reporte o la respuesta. Los ya publicados no se vuelven a validar | Bajo | Ninguno al fijarlo. Un solo parámetro sirve para rechazos, reportes y respuestas: un cambio afecta a los tres |
+| 11 | Aviso de cercanía a la lista visible | Avisos que se repiten o que no llegan | Aplica de inmediato, sin envíos retroactivos y con un solo aviso por paso por Waiting | Bajo | Depende del aviso único de posición (ver Notas) y de las apps visibles en la cola (fila 6) |
+| 12 | Aviso de cercanía al top | Igual al anterior | Igual al anterior | Bajo | Depende del aviso único de posición. Un cambio en el tamaño del top (fila 1) también mueve las posiciones |
 
 ### Notas
 
-- **Aviso único de posición (filas 6, 13 y 14).** Hace falta desde el lanzamiento aunque no cambie ningún parámetro. Las apps Insuficiente y Arreglada entran a Waiting por delante de las demás, así que una app en la posición 20 puede salir de la lista visible y volver a entrar. Sin un solo aviso por paso por Waiting, recibiría dos veces "Tu app ya aparece en la cola".
+- **Aviso único de posición (filas 6, 11 y 12).** Hace falta desde el lanzamiento aunque no cambie ningún parámetro. Las apps Insuficiente entran a Waiting por delante de las demás, así que una app en la posición 20 puede salir de la lista visible y volver a entrar. Sin un solo aviso por paso por Waiting, recibiría dos veces "Tu app ya aparece en la cola".
 - **Regresos que vuelven a En progreso (fila 2).** Si la ventana se fija al entrar En progreso, un regreso que vuelve a ese estado toma el valor vigente en ese momento. Es coherente con el tiempo en el top, que se fija en cada entrada al top, pero no con el mínimo y el máximo de postulantes, que un regreso conserva. Falta decidir cuál aplica: Regresos dice hoy "24 h en total y 12 h para postulantes adicionales".
 - **Plazo del dev compartido (filas 3 y 4).** Un solo parámetro sirve para las capturas de instalación y de permanencia. Separarlo en dos permitiría ajustar uno sin mover el otro.
-- **Avisos con horas (filas 2 a 5, 9 y 10).** Los avisos que muestran un plazo, como "tienes 48 h para enviarla" o "Tienes 24 h para validar", deben usar el valor fijado de cada app, no el vigente. Es una sola regla para todos los avisos, por eso no sube el costo de esas filas.
-- **Mínimo de reportes de cuentas distintas y porcentaje de reportes para pausar (punto abierto).** Se resuelven antes del MVP, porque los reportes falsos son un riesgo del lanzamiento que puede pedir un ajuste rápido y siempre hay apps en el top. Sin regla, si el mínimo baja de 3 a 2, una app en el top con 2 reportes se pausa de golpe. Falta decidir cuándo quedan fijados los dos, que se evalúan juntos para pausar una app. Fijarlos al entrar al top deja un hueco: una app Expirada o Insuficiente vuelve al top con los reportes que ya tenía, porque solo la Arreglada reinicia el conteo, y se mediría contra un umbral nuevo. Fijarlos al enviar la app a la cola, como el mínimo y el máximo de postulantes, cierra el hueco sin efectos secundarios.
-
+- **Avisos con horas (filas 2 a 5, 8 y 9).** Los avisos que muestran un plazo, como "tienes 48 h para enviarla" o "Tienes 24 h para validar", deben usar el valor fijado de cada app, no el vigente. Es una sola regla para todos los avisos, por eso no sube el costo de esas filas.
 ## Pendientes y fuera del MVP
 
 El concepto está cerrado; quedan decisiones que se toman con datos, cerca del lanzamiento o que siguen en análisis.
@@ -659,7 +632,8 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 - Apps simultáneas por dev, respetando la cadena de responsabilidad. Punto de partida: permitir una app nueva si el usuario reunió X instalaciones aprobadas nuevas desde la última app.
 - Extensión pagada del tiempo en el top: hoy va en contra de agilizar la cola. Si se retoma, se define entonces.
 - Traspaso de package names entre cuentas.
-- Retirar apps de la cola: para que un dev que se equivocó (link, nombre u otro dato) pueda corregirlo sin esperar los reportes. Si se retoma, debe respetar la cadena de responsabilidad: volver a enviar la app a la cola exige las condiciones de la regla base.
+- Qué hacer con las apps reportadas: por ejemplo, pausarlas, darle al dev un plazo para arreglarlas y devolverlas a la cola, o dejarlas abandonadas con la opción de reencolarlas pagando. En el MVP los reportes son informativos y no cambian el estado de la app. Si se retoma, debe evitar que reportes injustos saquen apps del top.
+- Retirar apps de la cola: para que un dev que se equivocó (link, nombre u otro dato) pueda corregirlo sin esperar a que se venza su tiempo en el top. Si se retoma, debe respetar la cadena de responsabilidad: volver a enviar la app a la cola exige las condiciones de la regla base.
 - Avisos por tiempo estimado de espera.
 - Moderación de rechazos y apelaciones de capturas y de reportes.
 - Baja de usuarios, solo sin compromisos pendientes. Falta definir cómo y cuándo se elimina la cuenta (por ejemplo, con una tarea programada) y qué pasa con su historial público: rechazos, reportes y calificación visibles en las apps de otros.
