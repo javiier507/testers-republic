@@ -352,9 +352,10 @@ Las tareas del dev no son compromisos: no cumplirlas no bloquea ni afecta su cal
 
 - La primera app no requiere compromisos previos. Así se alimenta la plataforma.
 - Desde la segunda, el usuario sube su siguiente app al cumplir las dos condiciones de la regla base.
-- Instalar es obligatorio: el compromiso se cumple al reunir las instalaciones aprobadas requeridas en apps de otros desde que el usuario subió su app anterior. Las capturas pendientes no cuentan hasta que se aprueban.
+- Instalar es obligatorio: cuentan las capturas de instalación del usuario como postulante, en apps de otros, aprobadas desde la última vez que envió una app a la cola, sea al subirla o al reencolarla. Las capturas pendientes no cuentan hasta que se aprueban; una que se aprueba después de un envío cuenta para el ciclo siguiente.
+- Cada envío a la cola cierra el ciclo: las instalaciones usadas no vuelven a contar y las que sobran no pasan al ciclo siguiente.
 - Las instalaciones requeridas se exigen desde la segunda app, en cada ciclo: 3 para la segunda, otras 3 para la tercera, y así. Son un parámetro por plan: para la segunda app rige el valor de las apps gratuitas y, desde la tercera, el de las apps de pago. Ambos empiezan en 3 y nunca bajan de 1, que es el mínimo de la regla base.
-- El número de instalaciones requeridas queda fijado al subir la app anterior. Si el parámetro cambia, no afecta a los usuarios que ya están en curso: el nuevo valor les aplica desde la siguiente app que suban.
+- Cada vez que el usuario sube una app, queda fijado cuántas instalaciones necesitará para subir la siguiente. Si el parámetro cambia después, no le afecta: el nuevo valor le aplica recién desde la siguiente app que suba.
 - Las instalaciones aprobadas desbloquean la siguiente app sin esperar los 14 días. Las permanencias de esas postulaciones no bloquean, se cumplan o no.
 - La cadena aplica igual en el plan de pago: pagar quita el límite de cantidad, no las condiciones de la regla base.
 - Si una app termina Abandonada, sigue ocupando su espacio dentro del total de apps del dev, incluidas las 2 gratuitas. Reencolarla se paga y solo se puede una vez.
@@ -545,9 +546,8 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 
 ### Por decidir dentro del MVP
 
-- [ ] **Desde cuándo se cuentan las instalaciones al reencolar:** las instalaciones requeridas se cuentan "desde que subió su app anterior". Con reencolados, ¿el conteo empieza en la subida de la app o en el último registro? Con esta regla, quien reencola podría usar instalaciones de un ciclo que ya cerró. Recomendación: contar desde el último registro, sea una app nueva o un reencolado.
-- [ ] **Qué número de instalaciones se exige al reencolar:** el parámetro cambia según el número de app: la segunda usa el del plan gratuito y desde la tercera el del plan de pago. Un reencolado no es la "segunda" ni la "tercera" app. Por ejemplo, si alguien tiene una sola app Finalizada y la reencola, ¿cuál se aplica? Como el reencolado siempre se paga, lo coherente parece el del plan de pago.
-- [ ] **En qué ciclo cuenta una instalación:** si alguien se postula antes de subir su app y la instalación se aprueba después, ¿para qué ciclo cuenta? Hay que decidir si manda la fecha en que se postuló o la fecha en que se aprobó.
+- [ ] **Qué número de instalaciones se exige al reencolar:** el parámetro cambia según el número de app: la segunda usa el del plan gratuito y desde la tercera el del plan de pago. Un reencolado no es la "segunda" ni la "tercera" app. Propuesta: el del plan de pago, porque reencolar siempre se paga. Alternativa: un solo parámetro de instalaciones para todos los envíos a la cola desde el segundo, sea una app gratuita, una de pago o un reencolado.
+- [ ] **Qué número queda fijado al subir una app:** al subir una app queda fijado cuántas instalaciones necesitará el usuario para la siguiente, pero hay dos parámetros (gratuito y de pago) y en ese momento no se sabe si lo siguiente será una app gratuita, una de pago o un reencolado. Opciones: guardar los dos valores vigentes y usar en el próximo envío el que corresponda, o tener un solo parámetro para todos los envíos. Duda relacionada: con dos parámetros, quien paga podría tener que aportar más instalaciones que quien no paga.
 - [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de los registros).
 
 ### Por decidir cerca del lanzamiento
@@ -567,6 +567,7 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 - Grupos de Google propios del dev, como función activable.
 - Extensión pagada del tiempo en el top: hoy va en contra de agilizar la cola. Si se retoma, se define entonces.
 - Traspaso de package names entre cuentas.
+- Retirar apps de la cola: para que un dev que se equivocó (link, nombre u otro dato) pueda corregirlo sin esperar los reportes. Si se retoma, debe respetar la cadena de responsabilidad: volver a enviar la app a la cola exige las condiciones de la regla base.
 - Avisos por tiempo estimado de espera.
 - Moderación de rechazos y apelaciones de capturas y de reportes.
 - Baja de usuarios, solo sin compromisos pendientes. Falta definir cómo y cuándo se elimina la cuenta (por ejemplo, con una tarea programada) y qué pasa con su historial público: rechazos, reportes y calificación visibles en las apps de otros.
