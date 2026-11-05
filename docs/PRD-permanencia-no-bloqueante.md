@@ -21,8 +21,9 @@ La permanencia deja de bloquear y pasa al sistema de confianza: la plataforma mu
 | Calificación | Cuatro métricas ponderadas, de postulante y de dev, con promedio suavizado | Solo permanencias: "11 de 12 permanencias cumplidas" |
 | Validar y cerrar como dev | Si no cumple, baja su calificación | Si no cumple, la plataforma lo resuelve sola, sin consecuencias para él |
 | Cierre | El dev cierra antes del día 20 | 48 h para que los postulantes envíen su permanencia y luego 24 h para que el dev las valide |
-| Abandonada | Pierde el desbloqueo usado y baja la calificación | Ocupa su espacio; volver a subirla se paga y solo se puede una vez |
-| Volver a subir una app | No está definido | Abandonada y Finalizada, pagando; Ignorada, nunca |
+| Abandonada | Pierde el desbloqueo usado y baja la calificación | Ocupa su espacio; reencolarla se paga y solo se puede una vez |
+| Reencolar una app | No está definido | Abandonada, una vez y pagando; Finalizada, pagando y sin límite; Ignorada, nunca |
+| Insuficiente, Arreglada y Vencida | Se llaman "reencoladas" | Se llaman "regresos": el mismo registro cambia de estado y vuelve a Waiting |
 | Detección de duplicados | En el MVP | Fuera del MVP |
 
 ## Regla base: la cadena de responsabilidad
@@ -54,7 +55,7 @@ Se agrega una fila:
 
 | Función | ¿Respeta la cadena? | Por qué |
 | --- | --- | --- |
-| Volver a subir una app Abandonada o Finalizada | Sí | La app vuelve como nueva y exige las dos condiciones de la regla base; pagar no las reemplaza |
+| Reencolar una app Abandonada o Finalizada | Sí | Crea un registro nuevo en la cola y exige las dos condiciones de la regla base; pagar no las reemplaza |
 
 ## Objetivos y alcance del MVP
 
@@ -82,18 +83,24 @@ Se agrega una señal:
 
 | Término | Significado |
 | --- | --- |
+| App | El software que se sube para conseguir testers. Su nombre y su package name no cambian después de crearse. Tiene un registro en la cola, o varios si se reencola |
+| Registro en la cola | Cada paso de una app por la cola. Tiene su estado, sus postulantes, sus capturas, sus regresos y sus reportes. Los postulantes se postulan a un registro, no a la app |
+| Regreso | Un registro que vuelve a Waiting como Insuficiente, Arreglada o Vencida. Es el mismo registro que cambia de estado. Reemplaza al término "Reencolada" del PRD |
+| Reencolar | Función de pago: crea un registro nuevo en la cola para una app Abandonada o Finalizada |
 | Compromiso | Una obligación del postulante con plazo: instalar o permanecer |
 | Cierre | El dev valida las permanencias de su app; si no lo hace, la plataforma la cierra al vencer su plazo |
 | Calificación | Cuántas permanencias cumplió el usuario como postulante, sobre todas las que se resolvieron |
 
 Postularse sigue siendo enviar la captura de instalación, pero no es un compromiso propio: queda incluido en las instalaciones requeridas.
 
+Todas las menciones de "reencolada" y "reencolamiento" del PRD pasan a "regreso": la sección Reencolamiento pasa a llamarse Regresos, y "apps nuevas y reencoladas" en Waiting pasa a "apps nuevas y regresos".
+
 ### Principios: confianza y contención
 
 | Cambio | Confianza | Contención |
 | --- | --- | --- |
 | Se agrega | Cada postulante decide si permanece; su calificación lo muestra | — |
-| Se agrega | — | Pago para volver a subir una app Abandonada o Finalizada |
+| Se agrega | — | Pago para reencolar una app Abandonada o Finalizada |
 | Se quita | — | Bloqueo por permanencia fallida |
 | Se quita | — | Detección de capturas duplicadas |
 | Cambia | — | "Cierre automático al día límite" pasa a ser: cierre automático al vencer el plazo del dev para validar las permanencias |
@@ -106,8 +113,8 @@ Postularse sigue siendo enviar la captura de instalación, pero no es un comprom
 | --- | --- |
 | Por cerrar | Desde que se cumplen los 14 días: los postulantes tienen 48 h para enviar su captura de permanencia y luego el dev tiene 24 h para validarlas |
 | Finalizada | No queda ninguna permanencia por entregar ni por validar, porque el dev las validó o porque vencieron los plazos; el dev queda libre para su siguiente app |
-| Abandonada | No se arregló a tiempo, o se pausó otra vez después de agotar sus regresos como Arreglada; el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total de apps. Se puede volver a subir una vez, pagando |
-| Ignorada | Se le acabó el tiempo en el top por segunda vez, o quedó Insuficiente otra vez después de agotar sus regresos; el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total de apps. No se puede volver a subir |
+| Abandonada | No se arregló a tiempo, o se pausó otra vez después de agotar sus regresos como Arreglada; el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total de apps. Se puede reencolar una vez, pagando |
+| Ignorada | Se le acabó el tiempo en el top por segunda vez, o quedó Insuficiente otra vez después de agotar sus regresos; el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total de apps. No se puede reencolar |
 
 ### Diagrama de estados
 
@@ -117,7 +124,7 @@ Cambia una sola transición:
 | --- | --- |
 | `PorCerrar --> Finalizada: Cierra el dev o llega el día límite` | `PorCerrar --> Finalizada: No quedan permanencias por entregar ni por validar` |
 
-Volver a subir una app no es una transición: crea una app nueva en la cola, que empieza en En espera.
+Reencolar no es una transición: crea un registro nuevo en la cola, que empieza en En espera. El registro anterior conserva su estado final.
 
 ## Reglas de operación
 
@@ -125,16 +132,18 @@ Volver a subir una app no es una transición: crea una app nueva en la cola, que
 
 Se agregan estas reglas:
 
-- Una app Abandonada se puede volver a subir una sola vez, pagando. Si vuelve a quedar Abandonada, ya no se puede subir más.
-- Una app Finalizada se puede volver a subir pagando; por ejemplo, si Google pidió otra prueba cerrada antes de dar acceso a producción.
-- Una app Ignorada no se puede volver a subir, ni pagando.
+- Una app Abandonada se puede reencolar una sola vez, pagando. El límite es por app: si vuelve a quedar Abandonada, ya no se puede reencolar, aunque entre medio haya quedado Finalizada.
+- Una app Finalizada se puede reencolar pagando, sin límite; por ejemplo, si Google pidió otra prueba cerrada antes de dar acceso a producción.
+- Una app Ignorada no se puede reencolar, ni pagando.
 - Una app que nunca se subió sigue las reglas normales: es gratuita si al usuario le quedan apps gratuitas.
-- Una app que se vuelve a subir es una app nueva en la cola: empieza sin postulantes y con el conteo de reportes en cero, y sus reportes anteriores siguen siendo públicos. Exige las dos condiciones de la regla base, cuenta como otra app dentro del total del dev y recibe el mínimo y el máximo del plan de pago.
-- Solo la cuenta dueña del package name puede volver a subir la app.
+- Reencolar crea un registro nuevo en la cola: empieza sin postulantes y con el conteo de reportes en cero, y los reportes de sus registros anteriores siguen siendo públicos. En Waiting aparece como una app nueva.
+- Reencolar exige las dos condiciones de la regla base. Las instalaciones requeridas siguen la misma regla que al subir una app nueva: reencolar no tiene parámetros propios.
+- Reencolar no ocupa otro espacio en el total de apps del dev: la app ocupa uno solo, tenga uno o varios registros. El registro nuevo sí ocupa su lugar en la cola y recibe el mínimo y el máximo del plan de pago.
+- Solo la cuenta dueña del package name puede reencolar la app.
 
 ### Postulaciones y capturas
 
-- La postulación es a la app en la cola. Si una app se vuelve a subir, quienes se postularon a la anterior pueden postularse de nuevo.
+- La postulación es a un registro en la cola, no a la app. Si una app se reencola, quienes se postularon a un registro anterior pueden postularse al nuevo, y esa es una instalación nueva.
 - Se quita "La plataforma bloquea capturas duplicadas o casi idénticas antes de que lleguen al dev". Pasa a Fuera del MVP.
 - La captura de permanencia se envía cuando se cumplen los 14 días, dentro de una ventana de 48 h. Si el postulante no la envía, cuenta como no cumplida en su calificación.
 - El rechazo de una captura de permanencia sigue sin poder apelarse y cuenta como no cumplida en la calificación del postulante. Ya no bloquea su siguiente app.
@@ -195,8 +204,8 @@ Se quitan:
 
 Cambian:
 
-- **App Abandonada:** sigue ocupando su espacio dentro del total de apps del dev, incluidas las 2 gratuitas. Volver a subirla se paga y solo se puede una vez. Su calificación no cambia.
-- **App Ignorada:** el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total. No se puede volver a subir.
+- **App Abandonada:** sigue ocupando su espacio dentro del total de apps del dev, incluidas las 2 gratuitas. Reencolarla se paga y solo se puede una vez. Su calificación no cambia.
+- **App Ignorada:** el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total. No se puede reencolar.
 
 ### Calificación
 
@@ -219,7 +228,7 @@ La calificación mide solo cómo cumple cada usuario sus permanencias como postu
 
 Se agrega:
 
-- Volver a subir una app Abandonada o Finalizada se paga siempre, aunque al usuario le queden apps gratuitas. La app recibe el mínimo y el máximo del plan de pago.
+- Reencolar una app Abandonada o Finalizada se paga siempre, aunque al usuario le queden apps gratuitas. No ocupa otro espacio en su total. El registro nuevo recibe el mínimo y el máximo del plan de pago.
 - Una app Abandonada sigue ocupando su espacio en el total. Si era gratuita, consumió una de las 2 gratuitas.
 
 ## Notificaciones
@@ -231,7 +240,7 @@ Se agrega:
 | Se agrega | Se cerró la ventana sin su captura | Postulante | "No enviaste tu captura de permanencia: cuenta como no cumplida en tu calificación" |
 | Cambia | Se cierra la ventana de permanencia | Dev | "Tienes 24 h para validar las permanencias de tu app" |
 | Se agrega | 6 h antes de que las permanencias se aprueben solas | Dev | "Tus permanencias se aprueban solas en 6 h" |
-| Cambia | Pasa a Abandonada | Dev | "Tu app quedó abandonada: no se arregló a tiempo. Para volver a subirla tendrás que pagar" |
+| Cambia | Pasa a Abandonada | Dev | "Tu app quedó abandonada: no se arregló a tiempo. Para reencolarla tendrás que pagar" |
 | Se agrega | Pasa a Finalizada | Dev | "Tu app se cerró. Ya puedes informar cómo te fue en Google Play" |
 
 ## Parámetros configurables
@@ -247,7 +256,7 @@ Se agrega:
 | Se quitan | Valor neutral del promedio suavizado, peso del valor neutral y vida media de lo reciente | — | — | — |
 | Se quita | Compromisos para dejar de ser "Nuevo" | — | — | — |
 
-El límite de una sola vez para volver a subir una app Abandonada es fijo.
+El límite de una sola vez para reencolar una app Abandonada es fijo.
 
 ## Riesgos asumidos
 
@@ -285,4 +294,4 @@ El límite de una sola vez para volver a subir una app Abandonada es fijo.
 
 Se agrega:
 
-- Detección de capturas duplicadas. Criterio si se retoma: bloquear solo el mismo archivo exacto; una captura nueva parecida a una anterior del mismo postulante para la misma app se acepta, porque puede volver a postularse cuando la app se vuelve a subir.
+- Detección de capturas duplicadas. Criterio si se retoma: bloquear solo el mismo archivo exacto; una captura nueva parecida a una anterior del mismo postulante para la misma app se acepta, porque puede volver a postularse cuando la app se reencola.
