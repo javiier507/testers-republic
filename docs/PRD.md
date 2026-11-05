@@ -251,7 +251,7 @@ Cada dev tiene una sola app activa a la vez, que avanza según su turno en la co
 - Hay 5 apps en el top. Una app entra al top cuando le toca su turno.
 - Tiempo en el top: 72 h en el lanzamiento, luego 24 h. Si se acaba antes de recibir el mínimo de postulaciones, la app pasa a Expirada y vuelve a la cola; si le pasa por segunda vez, pasa a Ignorada (ver Regresos).
 - Cada app tiene su propio tiempo límite: se calcula al entrar al top, con el valor vigente del parámetro que le corresponde (el normal o el de su tipo de regreso). Si un parámetro cambia, solo afecta a las apps que entren al top después; las que ya están conservan su tiempo límite.
-- Al recibir el mínimo de postulaciones de su plan (12 gratis, 15 de pago), la app pasa a En progreso y libera su lugar.
+- Al recibir el mínimo de postulaciones de su plan (12 gratis, 15 de pago), la app pasa a En progreso y libera su lugar. Cuentan todas las postulaciones recibidas, incluso las que el dev ya rechazó: salir del top depende de recibir postulaciones a tiempo, y en En progreso se decide si se aprueban.
 - En progreso dura como máximo 24 h. Durante sus primeras 12 h acepta postulantes adicionales hasta el máximo de su plan (15 gratis, 20 de pago); las capturas de los adicionales también cuentan para completar el mínimo.
 - En cuanto las capturas aprobadas llegan al mínimo, por el dev o por aprobación automática, la app pasa a En prueba y deja de mostrarse en la cola, aunque no hayan pasado las 12 h.
 - Si termina la ventana de postulantes adicionales, no quedan capturas pendientes y las aprobadas no llegan al mínimo, la app pasa a Insuficiente y vuelve a la cola (ver Regresos). Mientras quede una captura pendiente o la ventana siga abierta, la app sigue En progreso.
@@ -271,7 +271,7 @@ Un regreso es el mismo registro que vuelve a Waiting: conserva lo que ya consigu
 | Regreso | Qué conserva | Tiempo en el top al volver | Límite |
 | --- | --- | --- | --- |
 | Insuficiente | Sus capturas aprobadas; las rechazadas no cuentan | 6 h | 2 regresos; si queda Insuficiente una tercera vez, pasa a Ignorada |
-| Expirada | Todos sus postulantes, incluidas las capturas pendientes, que se siguen aprobando solas | 12 h | 1 regreso; la segunda expiración la deja Ignorada |
+| Expirada | Todos sus postulantes, incluidas las capturas pendientes, que se siguen aprobando solas, y las rechazadas, que siguen contando para salir del top | 12 h | 1 regreso; la segunda expiración la deja Ignorada |
 
 - Las expiraciones se cuentan por registro en la cola, sin importar de dónde venga la app: la primera vez que se le acaba el tiempo en el top, sea nueva o un regreso, pasa a Expirada; la segunda, a Ignorada.
 - Cada tipo de regreso tiene su propio contador.
@@ -292,7 +292,7 @@ Una captura de instalación cuenta distinto para la app del dev y para el postul
 | --- | --- | --- |
 | Enviada (pendiente) | Cuenta para el mínimo de postulaciones que la saca del top | Todavía no cuenta |
 | Aprobada | Cuenta para el mínimo de aprobadas que la lleva a En prueba | Cuenta para desbloquear su siguiente app |
-| Rechazada | Deja de contar para En prueba | No desbloquea. El rechazo es público, pero no afecta su calificación |
+| Rechazada | Sigue contando para el mínimo de postulaciones que la saca del top; deja de contar para En prueba | No desbloquea. El rechazo es público, pero no afecta su calificación |
 
 - El dev valida todas las postulaciones que recibe, hasta el máximo de su plan. Tiene 24 h por captura y recibe un recordatorio 6 h antes de que se aprueben solas. En En progreso el límite es único: todas las capturas pendientes se aprueban solas como tarde a las 24 h de que la app entró en ese estado, incluidas las de los postulantes adicionales. La demora del dev nunca castiga al postulante.
 - Un rechazo requiere una justificación escrita de 30 a 280 caracteres y se basa en la captura, nunca en la calificación del postulante.
