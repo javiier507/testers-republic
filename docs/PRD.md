@@ -55,7 +55,7 @@ Es la regla sobre la que se sostiene la plataforma. Si una función permite salt
 
 Los parámetros (ver Parámetros configurables) se cambian en producción, sin deploy, para ajustar la cola con rapidez. Un cambio nunca afecta a lo que ya empezó: cada cuenta y cada app conservan los valores vigentes cuando empezaron, y el valor nuevo aplica solo a lo que empiece después. Esto vale también cuando el cambio favorece al usuario.
 
-| Valor | Queda fijado | Ejemplo |
+| Valor | Cuándo se toma el valor | Ejemplo |
 | --- | --- | --- |
 | Apps gratuitas en total | Al crear la cuenta | Un usuario creado con 2 apps gratuitas conserva 2, aunque el parámetro pase a 1 o a 3 |
 | Instalaciones requeridas | En cada envío a la cola, sea al subir una app o al reencolarla. Se fijan los valores de ambos planes (ver Instalaciones requeridas por plan) | Quien sube su app con 3 requeridas necesita 3 para su siguiente envío, aunque el parámetro pase a 5 o a 2 |
@@ -563,7 +563,7 @@ La captura de Play Console y el resultado en Google Play son informativos y alim
 
 ## Propuesta para fijar los demás parámetros
 
-Propuesta para el pendiente [Verificar que los cambios a nivel de sistema no afecten a procesos en curso](#por-decidir-dentro-del-mvp). Indica en qué momento queda fijado cada parámetro que todavía no figura en [Cambios de configuración](#cambios-de-configuración) y si conviene resolverlo antes del MVP o puede esperar. Cuando se apruebe, cada fila pasa a esa tabla.
+Propuesta para el pendiente [Verificar que los cambios a nivel de sistema no afecten a procesos en curso](#por-decidir-dentro-del-mvp). Indica en qué momento se toma el valor de cada parámetro que todavía no figura en [Cambios de configuración](#cambios-de-configuración) y si conviene resolverlo antes del MVP o puede esperar. Cuando se apruebe, cada fila pasa a esa tabla.
 
 Algunos parámetros no se fijan por cuenta ni por app: valen para toda la plataforma o solo cambian lo que se muestra. Esos aplican de inmediato, con una regla que evita efectos sobre lo que ya empezó.
 
@@ -579,9 +579,9 @@ El costo de cerrar un parámetro es lo que se mueve en el resto de la plataforma
 
 Están aquí porque aparecen en las señales para ajustar la cola (filas 1 y 2) o porque siempre hay algo en curso que el cambio dañaría sin vuelta atrás (filas 3 a 5).
 
-| # | Parámetro | Qué pasa si cambia sin regla | Queda fijado | Costo | Efectos secundarios |
+| # | Parámetro | Qué pasa si cambia sin regla | Cuándo se toma el valor | Costo | Efectos secundarios |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Tamaño del top | Si baja de 5 a 3 con 5 apps en el top, no está claro si 2 salen antes de tiempo | Aplica de inmediato y no saca a ninguna app: las que están en el top se quedan hasta salir por sus reglas, y no entra ninguna nueva hasta que queden menos que el nuevo tamaño. Si sube, entran apps de inmediato | Medio | Si baja, el top muestra más apps que el nuevo tamaño hasta que salgan, y Waiting no avanza mientras tanto. Si sube, varias apps entran juntas: empiezan su tiempo en el top a la vez y se envían en bloque los avisos de entrada al top y los de posición de las apps que avanzan en Waiting |
+| 1 | Tamaño del top | Si baja de 5 a 3 con 5 apps en el top, no está claro si 2 salen antes de tiempo | No se toma: aplica de inmediato y no saca a ninguna app: las que están en el top se quedan hasta salir por sus reglas, y no entra ninguna nueva hasta que queden menos que el nuevo tamaño. Si sube, entran apps de inmediato | Medio | Si baja, el top muestra más apps que el nuevo tamaño hasta que salgan, y Waiting no avanza mientras tanto. Si sube, varias apps entran juntas: empiezan su tiempo en el top a la vez y se envían en bloque los avisos de entrada al top y los de posición de las apps que avanzan en Waiting |
 | 2 | Ventana para postulantes adicionales | Si baja de 12 h a 6 h en la hora 8, la ventana se cierra en el acto | Al entrar En progreso, junto con el plazo del dev de ese estado, para que la ventana siga siendo menor que el plazo | Alto | Arrastra al plazo del dev, que se fija en el mismo momento. El panel debe impedir un plazo del dev menor o igual a la ventana. Abre una decisión sobre los regresos (ver Notas) |
 | 3 | Plazo del dev para validar, en las capturas de instalación | Si baja, las capturas se aprueban solas antes de lo anunciado; si sube, el postulante espera más | Al enviar cada captura. En En progreso, al entrar en ese estado, porque el límite es único | Medio | El mismo parámetro queda fijado en tres momentos: al enviar cada captura, al entrar En progreso y, para las permanencias, al pasar a En prueba (fila 4). El recordatorio (fila 8) debe seguir siendo menor que el plazo. Decide cuándo se aprueba una instalación y, con eso, si cuenta para el ciclo actual del postulante o para el siguiente |
 | 4 | Plazo del dev para validar, en las capturas de permanencia | Cambia la fecha de cierre que ya se le mostró al dev | Al pasar a En prueba, junto con la fecha de cierre (ver Postulaciones y capturas) | Bajo | Ninguno: la fecha de cierre ya se calcula al pasar a En prueba con los valores vigentes |
@@ -591,14 +591,14 @@ Están aquí porque aparecen en las señales para ajustar la cola (filas 1 y 2) 
 
 Ninguno aparece en las señales para ajustar la cola. Si cambian, el daño es menor; el que no tiene ese margen (fila 7) queda fijo durante el MVP.
 
-| # | Parámetro | Qué pasa si cambia sin regla | Queda fijado | Costo | Efectos secundarios |
+| # | Parámetro | Qué pasa si cambia sin regla | Cuándo se toma el valor | Costo | Efectos secundarios |
 | --- | --- | --- | --- | --- | --- |
-| 6 | Apps visibles en la cola | Si pasa de 20 a 30, aparecen 10 apps de golpe y no está claro si reciben el aviso | Aplica de inmediato, porque solo cambia lo que se muestra. Los avisos no se envían de forma retroactiva y cada uno se envía una sola vez por paso por Waiting | Bajo | Mueve el umbral del aviso de cercanía a la lista visible (fila 11), que se cuenta desde el final de la lista. Depende del aviso único de posición (ver Notas) |
+| 6 | Apps visibles en la cola | Si pasa de 20 a 30, aparecen 10 apps de golpe y no está claro si reciben el aviso | No se toma: aplica de inmediato, porque solo cambia lo que se muestra. Los avisos no se envían de forma retroactiva y cada uno se envía una sola vez por paso por Waiting | Bajo | Mueve el umbral del aviso de cercanía a la lista visible (fila 11), que se cuenta desde el final de la lista. Depende del aviso único de posición (ver Notas) |
 | 7 | Regresos a la cola como Insuficiente | Si el límite baja de 2 a 1, un registro que ya usó un regreso pasa a Ignorada en el siguiente, aunque al entrar tenía 2 | Al enviar la app a la cola, igual que el mínimo y el máximo de postulantes. Un regreso conserva el suyo; un registro reencolado toma el vigente | Bajo | Ninguno: se guarda junto con el mínimo y el máximo de postulantes |
 | 8 | Recordatorio antes de la aprobación automática | El aviso al dev se salta o se repite | Junto con el plazo al que recuerda: al enviar cada captura, al entrar En progreso o al pasar a En prueba | Bajo | Se fija en los mismos momentos que el plazo del dev (filas 3 y 4) y debe seguir siendo menor que ese plazo |
 | 9 | Aviso antes de que se cierre la ventana de permanencia | El aviso al postulante se salta o se repite | Al pasar a En prueba, junto con la ventana de permanencia | Bajo | Se fija junto con la ventana de permanencia (fila 5) y debe seguir siendo menor que ella |
 | 10 | Justificación de rechazos, reportes y respuestas: mínimo y máximo | Un texto a medio escribir deja de ser válido al enviarlo; los ya publicados podrían quedar fuera de rango | Al enviar el rechazo, el reporte o la respuesta. Los ya publicados no se vuelven a validar | Bajo | Ninguno al fijarlo. Un solo parámetro sirve para rechazos, reportes y respuestas: un cambio afecta a los tres |
-| 11 | Aviso de cercanía a la lista visible | Avisos que se repiten o que no llegan | Aplica de inmediato, sin envíos retroactivos y con un solo aviso por paso por Waiting | Bajo | Depende del aviso único de posición (ver Notas) y de las apps visibles en la cola (fila 6) |
+| 11 | Aviso de cercanía a la lista visible | Avisos que se repiten o que no llegan | No se toma: aplica de inmediato, sin envíos retroactivos y con un solo aviso por paso por Waiting | Bajo | Depende del aviso único de posición (ver Notas) y de las apps visibles en la cola (fila 6) |
 | 12 | Aviso de cercanía al top | Igual al anterior | Igual al anterior | Bajo | Depende del aviso único de posición. Un cambio en el tamaño del top (fila 1) también mueve las posiciones |
 
 ### Notas
@@ -613,7 +613,7 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 
 ### Por decidir dentro del MVP
 
-- [ ] **Verificar que los cambios a nivel de sistema no afecten a procesos en curso:** definir en qué momento queda fijado cada parámetro que todavía no figura en Cambios de configuración. Ver la propuesta en [Propuesta para fijar los demás parámetros](#propuesta-para-fijar-los-demás-parámetros).
+- [ ] **Verificar que los cambios a nivel de sistema no afecten a procesos en curso:** definir en qué momento se toma el valor de cada parámetro que todavía no figura en Cambios de configuración. Ver la propuesta en [Propuesta para fijar los demás parámetros](#propuesta-para-fijar-los-demás-parámetros).
 - [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de los registros).
 
 ### Por decidir cerca del lanzamiento
