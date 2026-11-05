@@ -28,7 +28,7 @@ Toda función, gratuita o de pago, actual o futura, debe respetar la cadena de r
 La primera app no exige nada. Desde la segunda, para subir la siguiente app el usuario necesita:
 
 1. Que su app anterior ya no esté activa: Finalizada o Ignorada.
-2. Las instalaciones aprobadas requeridas en apps de otros (3 en el lanzamiento) desde su último envío a la cola, sea al subir una app o al reencolarla.
+2. Las instalaciones aprobadas requeridas en apps de otros (3 en el lanzamiento) desde su último envío a la cola, sea al subir una app o al reencolarla. Para la segunda app cuentan todas desde que se creó la cuenta, también las conseguidas antes de subir la primera.
 
 Una instalación pendiente todavía no cuenta para el desbloqueo: cuenta recién cuando se aprueba, por el dev o sola. Las permanencias, sean pendientes, rechazadas o no entregadas, no bloquean. Lo que hace el usuario como dev tampoco bloquea ni afecta su calificación.
 
@@ -348,7 +348,7 @@ Cumplir las instalaciones desbloquea la siguiente app. Cumplir las permanencias 
 
 | Compromiso del postulante | Plazo | Si no cumple |
 | --- | --- | --- |
-| Instalar: las capturas de instalación aprobadas requeridas en apps de otros (3 en el lanzamiento) | Desde su último envío a la cola, antes del siguiente | No puede subir su siguiente app ni reencolar |
+| Instalar: las capturas de instalación aprobadas requeridas en apps de otros (3 en el lanzamiento) | Desde su último envío a la cola, antes del siguiente. Para la segunda app, desde que se creó la cuenta | No puede subir su siguiente app ni reencolar |
 | Permanencia | 48 h desde que se cumplen los 14 días | Cuenta como no cumplida en su calificación |
 
 Las tareas del dev no son compromisos: no cumplirlas no bloquea ni afecta su calificación.
@@ -364,7 +364,9 @@ Las tareas del dev no son compromisos: no cumplirlas no bloquea ni afecta su cal
 - La primera app no requiere compromisos previos. Así se alimenta la plataforma.
 - Desde la segunda, el usuario sube su siguiente app al cumplir las dos condiciones de la regla base.
 - Instalar es obligatorio: cuentan las capturas de instalación del usuario como postulante, en apps de otros, aprobadas desde la última vez que envió una app a la cola, sea al subirla o al reencolarla. Las capturas pendientes no cuentan hasta que se aprueban; una que se aprueba después de un envío cuenta para el ciclo siguiente.
-- Cada envío a la cola cierra el ciclo: las instalaciones usadas no vuelven a contar y las que sobran no pasan al ciclo siguiente.
+- El primer ciclo va desde que se crea la cuenta hasta el segundo envío. La primera app no usa instalaciones, así que las que el usuario consigue antes de subirla, por su cuenta, cuentan para la segunda junto con las que consigue después.
+- Desde el segundo envío, cada envío a la cola cierra el ciclo: las instalaciones usadas no vuelven a contar y las que sobran no pasan al ciclo siguiente.
+- Ejemplo: Juan se postula a 2 apps de otros antes de subir la suya y se las aprueban. Después sube su primera app, sin requisitos. Para la segunda le falta 1 instalación aprobada más. Si no se hubiera postulado a ninguna, necesitaría las 3 después de subir la primera. Para la tercera, en los dos casos, necesita 3 nuevas desde el segundo envío.
 - Las instalaciones requeridas se exigen en cada envío a la cola después del primero, sea una app nueva o un reencolado: 3 para el segundo envío, otras 3 para el tercero, y así. Cuántas se exigen depende de un parámetro por plan (ver Instalaciones requeridas por plan).
 - Las instalaciones aprobadas desbloquean la siguiente app sin esperar los 14 días. Las permanencias de esas postulaciones no bloquean, se cumplan o no.
 - La cadena aplica igual en el plan de pago: pagar quita el límite de cantidad, no las condiciones de la regla base.
