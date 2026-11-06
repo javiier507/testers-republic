@@ -83,6 +83,7 @@ El MVP busca que cada app consiga los testers comprometidos de su plan sin que l
 | --- | --- | --- |
 | La cola crece semana a semana | Entran más apps de las que salen | Subir las instalaciones requeridas de ambos planes a la vez. El efecto se ve en el siguiente ciclo de cada usuario, unas 3 semanas después, así que conviene ajustarlo con tiempo |
 | Las apps del top se llenan en minutos y los testers no encuentran dónde postularse | Hay más testers que apps disponibles | Ampliar el top |
+| Las apps que llegan a su mínimo lo hacen mucho antes de que se acabe su tiempo, y las que no llegan ocupan su lugar en el top hasta que se les acaba | El tiempo en el top es más largo de lo necesario: las apps que no consiguen su mínimo retienen lugares que otras esperan | Bajar el tiempo en el top; 24 h es el valor previsto |
 | Los testers prefieren unirse a apps En progreso y las del top tardan más en llenarse | La ventana para postulantes adicionales le quita testers al top | Reducir la ventana para postulantes adicionales |
 | Suben las permanencias no entregadas o rechazadas | La calificación no alcanza para que los postulantes permanezcan | Subir el máximo de postulantes del plan gratuito, subir las instalaciones requeridas de ambos planes o volver a evaluar si la permanencia debe bloquear la siguiente app. El resultado en Google Play, cuando el dev lo informa, es un dato complementario |
 | Muchas apps reportadas agotan su tiempo en el top | Las apps que no funcionan ocupan lugares del top | Volver a evaluar qué hacer con las apps reportadas (ver Fuera del MVP) |
@@ -257,7 +258,7 @@ Cada dev tiene una sola app activa a la vez, que avanza según su turno en la co
 
 - La cola se ordena por grupos y, dentro de cada grupo, por fecha de entrada (ver Cola visible y estados internos). Se muestran las 20 próximas apps y la calificación de cada dev.
 - Hay 5 apps en el top. Una app entra al top cuando le toca su turno.
-- Tiempo en el top: 72 h en el lanzamiento, luego 24 h. Si se acaba antes de recibir el mínimo de postulaciones, la app pasa a Expirada y vuelve a la cola; si le pasa por segunda vez, pasa a Ignorada (ver Regresos).
+- Tiempo en el top: 72 h en el lanzamiento; baja a 24 h cuando lo indiquen las señales para ajustar la cola. Si se acaba antes de recibir el mínimo de postulaciones, la app pasa a Expirada y vuelve a la cola; si le pasa por segunda vez, pasa a Ignorada (ver Regresos).
 - Cada app tiene su propio tiempo límite: se calcula al entrar al top, con el valor vigente del parámetro que le corresponde (el normal o el de su tipo de regreso). Si un parámetro cambia, solo afecta a las apps que entren al top después; las que ya están conservan su tiempo límite.
 - Al recibir el mínimo de postulaciones de su plan (12 gratis, 15 de pago), la app pasa a En progreso y libera su lugar. Cuentan todas las postulaciones recibidas, incluso las que el dev ya rechazó: salir del top depende de recibir postulaciones a tiempo, y en En progreso se decide si se aprueban.
 - En progreso dura como máximo 24 h. Durante sus primeras 12 h acepta postulantes adicionales hasta el máximo de su plan (15 gratis, 20 de pago); las capturas de los adicionales también cuentan para completar el mínimo. El máximo cuenta todas las postulaciones recibidas, incluso las rechazadas: una rechazada no libera su lugar.
