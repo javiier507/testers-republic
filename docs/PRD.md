@@ -453,7 +453,7 @@ Pueden seguir postulándose como testers y manteniendo su calificación. La plat
 
 ## Notificaciones
 
-La plataforma avisa en cada etapa del proceso, por email y con notificaciones web push del navegador. Los avisos de posición se basan en cuántas posiciones faltan, no en tiempos estimados.
+La plataforma avisa en cada etapa del proceso, por email y con notificaciones web push del navegador. Los avisos de posición se basan en cuántas posiciones faltan, no en tiempos estimados. Los postulantes reciben un aviso en cada cambio de estado de los registros a los que se postularon, mientras su captura de instalación esté pendiente o aprobada.
 
 | Evento | Para | Ejemplo |
 | --- | --- | --- |
@@ -461,14 +461,18 @@ La plataforma avisa en cada etapa del proceso, por email y con notificaciones we
 | Entra a las 20 visibles | Dev | "Tu app ya aparece en la cola" |
 | A 3 posiciones del top | Dev | "Estás a 3 posiciones del top" |
 | Entra al top | Dev | "Tu app está en el top y ya recibe postulaciones" |
+| Un regreso vuelve a entrar al top | Postulantes | "La app que pruebas volvió al top para completar su mínimo" |
 | Recibe postulaciones | Dev | "Tienes 4 capturas por validar" |
 | Recibe un reporte | Dev | "Tu app recibió un reporte: no abre" |
 | El dev responde un reporte | Usuario que reportó | "El dev respondió tu reporte" |
 | 6 h antes de que las capturas de instalación se aprueben solas | Dev | "Tus capturas se aprueban solas en 6 h" |
 | Expira el tiempo en el top | Dev | "Tu app volvió a la cola con sus postulantes" |
+| Expira el tiempo en el top | Postulantes | "La app que pruebas volvió a la cola sin llegar a su mínimo: tus 14 días todavía no empiezan" |
 | Pasa a En progreso | Dev | "Alcanzaste tu mínimo de postulantes: valida sus capturas" |
+| Pasa a En progreso | Postulantes | "La app que pruebas alcanzó su mínimo de postulantes: el dev está validando las capturas" |
 | Pasa a En prueba | Dev y postulantes | "Se aprobó el mínimo de capturas: empiezan los 14 días" |
 | Pasa a Insuficiente | Dev | "Tu app no llegó al mínimo de capturas aprobadas" |
+| Pasa a Insuficiente | Postulantes | "La app que pruebas no llegó al mínimo de capturas aprobadas y volvió a la cola: tus 14 días todavía no empiezan" |
 | Vuelve a la cola como Insuficiente | Dev | "Tu app volvió a la cola en la posición 3" |
 | Captura aprobada o rechazada | Postulante | "Rechazaron tu captura: no se ve la app instalada" |
 | Se abre la ventana de permanencia | Postulante | "Hoy toca tu captura de permanencia: tienes 48 h para enviarla" |
@@ -477,6 +481,7 @@ La plataforma avisa en cada etapa del proceso, por email y con notificaciones we
 | Se cierra la ventana de permanencia | Dev | "Tienes 24 h para validar las permanencias de tu app" |
 | 6 h antes de que las permanencias se aprueben solas | Dev | "Tus permanencias se aprueban solas en 6 h" |
 | Pasa a Finalizada | Dev | "Tu app se cerró. Ya puedes informar cómo te fue en Google Play" |
+| Pasa a Finalizada | Postulantes | "La app que probaste se cerró" |
 | Pasa a Ignorada | Dev | "Tu app no consiguió su mínimo de postulantes y quedó ignorada" |
 | Pasa a Ignorada | Postulantes | "Tu instalación cuenta para tu siguiente app; no tienes permanencia pendiente" |
 | Siguiente app desbloqueada | Usuario | "Ya puedes subir tu siguiente app" |
