@@ -226,9 +226,14 @@ Cada registro en la cola guarda el historial de sus transiciones: estado de orig
 
 Cada dev tiene una sola app activa a la vez, que avanza según su turno en la cola y sale del top al conseguir el mínimo de postulantes de su plan: 12 en el gratuito, 15 en el de pago.
 
+### Registro
+
+- El usuario se registra e inicia sesión solo con su cuenta de Google (OAuth). No hay registro con email y contraseña.
+
 ### Subida de una app
 
-- El dev pega el link de Google Play de su test cerrado; la plataforma extrae el package name.
+- El dev completa los datos de la app: nombre, ícono, categoría, link de Google Play de su test cerrado e instrucciones de uso. La ficha de la app muestra estos datos.
+- La plataforma extrae el package name del link de Google Play.
 - Cada package name pertenece a una sola cuenta, la primera que lo registra, y a una sola app. Al subir una app, la plataforma valida que su package name no esté registrado. Compara el package name extraído, no el link, porque dos links distintos pueden llevar a la misma app:
 
 | Si el package name ya está registrado en… | Resultado |
@@ -346,9 +351,9 @@ Un reporte avisa a los demás usuarios que la app no le funciona a quien reporta
 
 ### Transparencia de rechazos y reportes
 
-Los rechazos y los reportes son públicos, para que cada usuario pueda juzgar a los demás por lo que hacen. Se muestra todo lo que no comprometa a nadie: nunca las capturas.
+Los rechazos y los reportes son públicos, para que cada usuario pueda juzgar a los demás por lo que hacen. Quien no se postuló a una app también puede ver si sus rechazos fueron justos y decidir por su cuenta. Se muestra todo lo que no comprometa a nadie: nunca las capturas.
 
-- Todos los que participan en la prueba de una app ven los rechazos del dev: a qué postulante, el tipo de captura, el motivo y la justificación.
+- Los rechazos de una app los ven todos los usuarios, no solo quienes participan en su prueba: a qué postulante, el tipo de captura, el motivo y la justificación.
 - Los reportes de una app son públicos: quién reportó, el motivo, la justificación y la respuesta del dev.
 - El perfil de cada usuario muestra los rechazos que hizo como dev y los que recibió como postulante.
 
