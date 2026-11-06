@@ -228,7 +228,15 @@ Cada dev tiene una sola app activa a la vez, que avanza según su turno en la co
 ### Subida de una app
 
 - El dev pega el link de Google Play de su test cerrado; la plataforma extrae el package name.
-- Cada package name pertenece a una sola cuenta: la primera que lo registra.
+- Cada package name pertenece a una sola cuenta, la primera que lo registra, y a una sola app. Al subir una app, la plataforma valida que su package name no esté registrado. Compara el package name extraído, no el link, porque dos links distintos pueden llevar a la misma app:
+
+| Si el package name ya está registrado en… | Resultado |
+| --- | --- |
+| Otra cuenta | No se puede subir |
+| Una app activa del mismo usuario | No se puede subir: la app ya está en la cola |
+| Una app Finalizada del mismo usuario | No se puede subir como app nueva; la plataforma ofrece reencolarla, pagando |
+| Una app Ignorada del mismo usuario | No se puede subir ni reencolar |
+
 - El dev marca una casilla confirmando que la app está disponible en todos los países.
 - El test cerrado usa el grupo de Google de la plataforma. Si la función de grupo propio está activa (ver Parámetros configurables), al subir la app el dev puede agregar también su propio grupo. Los grupos quedan fijados al crear la app.
 - Cada usuario se une al grupo de Google de la plataforma por su cuenta. Al subir su primera app, el dev confirma con una casilla que ya está en el grupo. En cada app que sube, confirma con otra casilla que su test cerrado usa los grupos de la app. Ninguna de las dos se verifica.
