@@ -559,6 +559,7 @@ El MVP acepta varios riesgos a cambio de simplicidad y de no castigar a usuarios
 | Participación mínima: abrir la app solo para la captura | Las capturas prueban que se abrió, no que se usó | Aviso de que no se garantiza la aprobación de Google |
 | Apps gratuitas que avanzan con solo 12 postulantes, sin margen | Es el mínimo de Google, y la permanencia no bloquea | Aceptan hasta 15 postulantes; se avisa al dev que un abandono puede dejarlo por debajo de 12 |
 | Pocos datos sobre el resultado en Google Play | Informarlo es opcional | La señal para volver a evaluar se basa en las permanencias no entregadas y rechazadas |
+| Una caída de la plataforma consume plazos: el tiempo en el top, el plazo del dev antes de la aprobación automática y la ventana de permanencia siguen corriendo | Pausar y extender plazos agrega reglas y casos que el MVP no necesita | El historial de estados permite identificar los registros afectados por una caída |
 
 ### Privacidad de las capturas
 
