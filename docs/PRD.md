@@ -117,7 +117,7 @@ La plataforma no usa la palabra "aplicación": el software es una **app** y la a
 
 | Término | Significado |
 | --- | --- |
-| App | El software que se sube para conseguir testers. Su nombre, su link de Google Play, su package name y sus grupos de Google no cambian después de crearse, ni al reencolarla. Tiene un registro en la cola, o varios si se reencola |
+| App | El software que se sube para conseguir testers. Su nombre, su ícono, su categoría, su link de Google Play, su package name y sus grupos de Google no cambian después de crearse, ni al reencolarla; solo se pueden editar sus instrucciones de uso. Tiene un registro en la cola, o varios si se reencola |
 | Registro en la cola | Cada paso de una app por la cola. Tiene su estado, sus postulantes, sus capturas, sus regresos y sus reportes. Los postulantes se postulan a un registro, no a la app |
 | Usuario | Una sola cuenta que actúa en dos roles: dev y postulante |
 | Dev | El usuario cuando sube su app |
@@ -248,7 +248,7 @@ Cada dev tiene una sola app activa a la vez, que avanza según su turno en la co
 - El test cerrado usa el grupo de Google de la plataforma. Si la función de grupo propio está activa (ver Parámetros configurables), al subir la app el dev puede agregar también su propio grupo. Los grupos quedan fijados al crear la app.
 - Cada usuario se une al grupo de Google de la plataforma por su cuenta. Al subir su primera app, el dev confirma con una casilla que ya está en el grupo. En cada app que sube, confirma con otra casilla que su test cerrado usa los grupos de la app. Ninguna de las dos se verifica.
 - Si la app tiene un grupo propio, la plataforma muestra su enlace y el postulante se une a él antes de instalar.
-- Una vez subida, el dev no puede retirar la app ni cambiar su link de Google Play. Un link incorrecto es responsabilidad del dev.
+- Una vez subida, el dev no puede retirar la app ni cambiar sus datos, salvo las instrucciones de uso, que puede editar. Un link incorrecto es responsabilidad del dev.
 - La primera app entra sin requisitos. Las siguientes dependen de la cadena de desbloqueo (ver Compromisos).
 - Una app activa a la vez por dev, en plan gratuito y de pago. Una app deja de estar activa al llegar a Finalizada o Ignorada. Al reencolarse, vuelve a estar activa hasta que su registro nuevo llegue a uno de esos estados.
 - La pantalla de subida muestra el aviso de que la plataforma no garantiza el acceso a producción.
@@ -300,6 +300,7 @@ Un regreso es el mismo registro que vuelve a Waiting: conserva lo que ya consigu
 - Postularse es enviar la captura de instalación. No hay límite de postulaciones simultáneas.
 - La postulación es a un registro en la cola, no a la app. Cada usuario se postula una sola vez por registro, aunque el registro vuelva a la cola como regreso. Si una app se reencola, quienes se postularon a un registro anterior pueden postularse al nuevo, y esa es una instalación nueva.
 - Toda captura, de instalación o de permanencia, empieza como pendiente y pasa a aprobada o rechazada.
+- Una postulación o una captura enviada no se puede deshacer: no se puede cancelar ni reemplazar, aunque siga pendiente.
 - Toda captura, también la de un reporte o la de Play Console, es una sola imagen en PNG, JPG o WebP, de hasta 5 MB. Ese límite cubre casi cualquier captura de pantalla de un teléfono sin que el usuario tenga que reducirla. La plataforma la convierte a WebP antes de guardarla, para ocupar menos espacio durante la retención, sin perder lo que se necesita ver.
 - La plataforma no define qué debe mostrar una captura. Lo decide el dev al validarla: aprobar o rechazar queda a criterio de las personas.
 - Una captura rechazada no se puede reenviar: el rechazo es definitivo y no se puede apelar. Quien recibió el rechazo tampoco puede volver a postularse a ese registro, aunque vuelva a la cola como regreso.
@@ -389,7 +390,7 @@ Las tareas del dev no son compromisos: no cumplirlas no bloquea ni afecta su cal
 - Las instalaciones aprobadas desbloquean la siguiente app sin esperar los 14 días. Las permanencias de esas postulaciones no bloquean, se cumplan o no.
 - La cadena aplica igual en el plan de pago: pagar quita el límite de cantidad, no las condiciones de la regla base.
 - Si una app termina Ignorada, el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total, incluidas las 2 gratuitas. No se puede reencolar.
-- Si la app a la que se postuló termina Ignorada, el postulante no tiene permanencia pendiente, porque los 14 días nunca empezaron. Su instalación aprobada cuenta igual para su siguiente app.
+- Si la app a la que se postuló termina Ignorada, el postulante no tiene permanencia pendiente, porque los 14 días nunca empezaron. Su instalación aprobada cuenta igual para su siguiente app. Si su captura sigue pendiente, se sigue aprobando sola en su plazo, igual que en Expirada, y al aprobarse también cuenta.
 
 #### Instalaciones requeridas por plan
 
@@ -483,7 +484,8 @@ La plataforma avisa en cada etapa del proceso, por email y con notificaciones we
 | Pasa a Finalizada | Dev | "Tu app se cerró. Ya puedes informar cómo te fue en Google Play" |
 | Pasa a Finalizada | Postulantes | "La app que probaste se cerró" |
 | Pasa a Ignorada | Dev | "Tu app no consiguió su mínimo de postulantes y quedó ignorada" |
-| Pasa a Ignorada | Postulantes | "Tu instalación cuenta para tu siguiente app; no tienes permanencia pendiente" |
+| Pasa a Ignorada, con la captura de instalación aprobada | Postulantes | "Tu instalación cuenta para tu siguiente app; no tienes permanencia pendiente" |
+| Pasa a Ignorada, con la captura de instalación pendiente | Postulantes | "Tu instalación contará para tu siguiente app cuando se apruebe; no tienes permanencia pendiente" |
 | Siguiente app desbloqueada | Usuario | "Ya puedes subir tu siguiente app" |
 
 ## Parámetros configurables
@@ -566,6 +568,7 @@ El MVP acepta varios riesgos a cambio de simplicidad y de no castigar a usuarios
 | Link de Google Play incorrecto | No se puede corregir después de subir la app; es responsabilidad del dev | Reportes públicos |
 | Postulantes que salen del test antes del día 14 | No hay conexión con Google Play ni forma de detectarlo | Captura de permanencia y su rechazo por el dev |
 | Una persona con varias cuentas | Verificar identidad queda fuera del MVP | Package name único y calificación |
+| Una cuenta registra un package name que no es suyo y el verdadero dueño ya no puede subir su app | No hay conexión con Google Play para verificar quién es el dueño; el traspaso de package names queda fuera del MVP | Una sola app activa a la vez e instalaciones requeridas desde la segunda app: acaparar package names tiene un costo |
 | Un dev que abandona la plataforma | No hay forma de obligarlo a volver | Aprobación automática y cierre automático |
 | Participación mínima: abrir la app solo para la captura | Las capturas prueban que se abrió, no que se usó | Aviso de que no se garantiza la aprobación de Google |
 | Apps gratuitas que avanzan con solo 12 postulantes, sin margen | Es el mínimo de Google, y la permanencia no bloquea | Aceptan hasta 15 postulantes; se avisa al dev que un abandono puede dejarlo por debajo de 12 |
@@ -644,6 +647,7 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 - [ ] **Verificar que los cambios a nivel de sistema no afecten a procesos en curso:** definir en qué momento se toma el valor de cada parámetro que todavía no figura en Cambios de configuración. Ver la propuesta en [Propuesta para fijar los demás parámetros](#propuesta-para-fijar-los-demás-parámetros).
 - [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de los registros, banear usuarios).
 - [ ] **Efectos del baneo:** qué puede hacer un usuario baneado (iniciar sesión, postularse, subir apps), qué pasa con su app activa, sus postulaciones y sus compromisos pendientes, si lo que publicó sigue visible y si el baneo se puede revertir.
+- [ ] **Apps que dejan de funcionar durante los 14 días:** qué pasa si la app deja de funcionar, el dev la quita de Google Play o cierra el test antes de que se cumplan los 14 días. El postulante no podría enviar su captura de permanencia y le contaría como no cumplida sin que sea su culpa. Hoy una app solo se puede reportar en el top y durante las primeras 12 h de En progreso.
 
 ### Por decidir cerca del lanzamiento
 
