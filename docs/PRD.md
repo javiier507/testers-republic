@@ -307,6 +307,7 @@ Una captura de instalación cuenta distinto para la app del dev y para el postul
 - Un rechazo requiere una justificación escrita de 30 a 280 caracteres y se basa en la captura, nunca en la calificación del postulante.
 - Los 14 días empiezan cuando las capturas aprobadas llegan al mínimo de su plan (12 o 15) y la app pasa a En prueba. La plataforma muestra al dev dos fechas: desde cuándo puede solicitar producción a Google y la fecha en que su app se cierra a más tardar. Ambas se calculan para cada app al pasar a En prueba, con los valores vigentes en ese momento. La fecha de cierre suma dos plazos desde que se cumplen los 14 días: la ventana para enviar las capturas de permanencia (48 h) y el plazo del dev para validarlas (24 h).
 - Los postulantes adicionales se unen antes de que empiecen los 14 días, así que el día 14 y la ventana de permanencia son los mismos para todos los postulantes de la app.
+- La captura de permanencia es un compromiso de cada postulante con su captura de instalación aprobada, por el dev o sola. Quien recibió un rechazo de instalación no tiene permanencia, porque ese rechazo no afecta su calificación.
 - La captura de permanencia se envía cuando se cumplen los 14 días, dentro de una ventana de 48 h. Si el postulante no la envía, cuenta como no cumplida en su calificación.
 - El dev valida las capturas de permanencia, con una justificación escrita para cada rechazo; sin respuesta dentro de su plazo, se aprueban solas (ver Cierre). El rechazo no se puede apelar y cuenta como no cumplida en la calificación del postulante; no bloquea su siguiente app.
 
@@ -357,7 +358,7 @@ Cumplir las instalaciones desbloquea la siguiente app. Cumplir las permanencias 
 | Compromiso del postulante | Plazo | Si no cumple |
 | --- | --- | --- |
 | Instalar: las capturas de instalación aprobadas requeridas en apps de otros (3 en el lanzamiento) | Desde su último envío a la cola, antes del siguiente. Para la segunda app, desde que se creó la cuenta | No puede subir su siguiente app ni reencolar |
-| Permanencia | 48 h desde que se cumplen los 14 días | Cuenta como no cumplida en su calificación |
+| Permanencia, si su captura de instalación se aprobó | 48 h desde que se cumplen los 14 días | Cuenta como no cumplida en su calificación |
 
 Las tareas del dev no son compromisos: no cumplirlas no bloquea ni afecta su calificación.
 
