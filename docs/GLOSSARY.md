@@ -26,7 +26,7 @@ The UI never uses "application"; the software is always an **app**.
 | En espera (state) | Waiting | Section with the next 20 apps waiting their turn: new apps and returns together, with no visual difference |
 | En progreso (state) | In progress | "Reached their minimum — extra testers can join for 12 h while the dev reviews screenshots" |
 | Ventana para postulantes adicionales | h left | "8 h left · 5 spots" on In progress apps |
-| En prueba (state) | Running | Minimum of install screenshots approved; 14-day test running, no one else can join. Not shown in the queue, only in "My apps" and "Testing" |
+| En prueba (state) | Running | Every install screenshot reviewed and the minimum approved; 14-day test running, no one else can join. Not shown in the queue, only in "My apps" and "Testing" |
 | Mínimo de postulantes | Minimum | "9/12 · 3 to minimum" |
 | Lugares hasta el máximo de postulantes | Spots / Full | "5 spots"; "Full" when the maximum is reached |
 | Día del test | Day | Not shown in the queue: the 14-day test starts in Running, which the queue hides |

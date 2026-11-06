@@ -164,10 +164,10 @@ Una app avanza en línea recta de la cola al cierre, salvo cuando expira su tiem
 | --- | --- |
 | En espera | Aguarda su turno; aparece en la cola si está entre las 20 próximas |
 | En el top | Recibe postulaciones durante su tiempo límite y puede ser reportada |
-| En progreso | Recibió el mínimo de capturas de su plan (12 o 15). Dura como máximo 24 h: el dev valida las capturas y, durante las primeras 12 h, acepta postulantes adicionales hasta el máximo (15 o 20) y puede ser reportada |
+| En progreso | Recibió el mínimo de capturas de su plan (12 o 15). Dura como máximo 24 h: el dev valida todas las capturas y, durante las primeras 12 h, acepta postulantes adicionales hasta el máximo (15 o 20) y puede ser reportada |
 | Insuficiente | Terminó la ventana de postulantes adicionales, no quedan capturas pendientes y las aprobadas no llegan al mínimo; vuelve a la cola conservando sus aprobadas |
 | Expirada | Se le acabó el tiempo en el top antes de recibir el mínimo de postulaciones; vuelve a la cola con sus postulantes |
-| En prueba | Las capturas aprobadas llegaron al mínimo; nadie más puede unirse y corren los 14 días |
+| En prueba | No quedan capturas de instalación pendientes y las aprobadas llegaron al mínimo; nadie más puede unirse y corren los 14 días |
 | Por cerrar | Desde que se cumplen los 14 días: los postulantes tienen 48 h para enviar su captura de permanencia y luego el dev tiene 24 h para validarlas |
 | Finalizada | No queda ninguna permanencia por entregar ni por validar, porque el dev las validó o porque expiraron los plazos; el dev queda libre para su siguiente app |
 | Ignorada | Se le acabó el tiempo en el top por segunda vez, o quedó Insuficiente otra vez después de agotar sus regresos; el dev queda libre para su siguiente app y la app sigue ocupando su espacio dentro de su total de apps. No se puede reencolar |
@@ -187,7 +187,7 @@ stateDiagram-v2
     EnElTop --> EnProgreso: Recibe el mínimo de postulaciones
     EnElTop --> Expirada: Se acaba el tiempo por primera vez
     EnElTop --> Ignorada: Se acaba el tiempo por segunda vez
-    EnProgreso --> EnPrueba: Las aprobadas llegan al mínimo
+    EnProgreso --> EnPrueba: Sin pendientes y con las aprobadas en el mínimo
     EnProgreso --> Insuficiente: Ventana cerrada, sin pendientes y bajo el mínimo
     EnProgreso --> Ignorada: Insuficiente tras agotar sus regresos
     Insuficiente --> EnElTop: Le toca el turno
@@ -268,12 +268,14 @@ Cada dev tiene una sola app activa a la vez, que avanza según su turno en la co
 - Cada app tiene su propio tiempo límite: se calcula al entrar al top, con el valor vigente del parámetro que le corresponde (el normal o el de su tipo de regreso). Si un parámetro cambia, solo afecta a las apps que entren al top después; las que ya están conservan su tiempo límite.
 - Al recibir el mínimo de postulaciones de su plan (12 gratis, 15 de pago), la app pasa a En progreso y libera su lugar. Cuentan todas las postulaciones recibidas, incluso las que el dev ya rechazó: salir del top depende de recibir postulaciones a tiempo, y en En progreso se decide si se aprueban.
 - En progreso dura como máximo 24 h. Durante sus primeras 12 h acepta postulantes adicionales hasta el máximo de su plan (15 gratis, 20 de pago); las capturas de los adicionales también cuentan para completar el mínimo. El máximo cuenta todas las postulaciones recibidas, incluso las rechazadas: una rechazada no libera su lugar.
-- En cuanto las capturas aprobadas llegan al mínimo, por el dev o por aprobación automática, la app pasa a En prueba y deja de mostrarse en la cola, aunque no hayan pasado las 12 h.
+- El dev debe revisar todas las capturas que recibe, no solo las del mínimo. La app pasa a En prueba cuando no queda ninguna captura pendiente y las aprobadas llegan al mínimo, aunque no hayan pasado las 12 h. Desde ese momento deja de mostrarse en la cola. Si el dev no revisa todo, solo el tiempo límite decide por él: en la hora 24 las pendientes se aprueban solas.
 - Si termina la ventana de postulantes adicionales, no quedan capturas pendientes y las aprobadas no llegan al mínimo, la app pasa a Insuficiente y vuelve a la cola (ver Regresos). Mientras quede una captura pendiente o la ventana siga abierta, la app sigue En progreso.
 
 | Caso (plan gratis: mínimo 12) | Resultado |
 | --- | --- |
-| El dev aprueba 12 en la hora 3 | Pasa a En prueba en la hora 3 |
+| Recibe 12 y el dev aprueba las 12 en la hora 3 | Pasa a En prueba en la hora 3 |
+| Recibe 15, el dev aprueba 12 en la hora 3 y deja 3 sin revisar | Sigue En progreso. Pasa a En prueba cuando el dev revisa las 3, o en la hora 24, cuando se aprueban solas |
+| Recibe 15 y el dev revisa las 15 en la hora 5: aprueba 13 | Pasa a En prueba en la hora 5 |
 | Rechaza 1 en la hora 5 y no llega ningún adicional | Espera al cierre de la ventana, en la hora 12, y pasa a Insuficiente |
 | Rechaza 1 en la hora 5; llega un adicional en la hora 8 y el dev no lo revisa | Se aprueba solo en la hora 24 y pasa a En prueba |
 | Rechaza a ese adicional en la hora 13 | Sin pendientes, ventana cerrada y 11 aprobadas: pasa a Insuficiente |
@@ -315,7 +317,7 @@ Una captura de instalación cuenta distinto para la app del dev y para el postul
 
 - El dev valida todas las postulaciones que recibe, hasta el máximo de su plan. Tiene 24 h por captura y recibe un recordatorio 6 h antes de que se aprueben solas. En En progreso el límite es único: todas las capturas pendientes se aprueban solas como tarde a las 24 h de que la app entró en ese estado, incluidas las de los postulantes adicionales. La demora del dev nunca castiga al postulante.
 - Un rechazo requiere una justificación escrita de 30 a 280 caracteres y se basa en la captura, nunca en la calificación del postulante.
-- Los 14 días empiezan cuando las capturas aprobadas llegan al mínimo de su plan (12 o 15) y la app pasa a En prueba. La plataforma muestra al dev dos fechas: desde cuándo puede solicitar producción a Google y la fecha en que su app se cierra a más tardar. Ambas se calculan para cada app al pasar a En prueba, con los valores vigentes en ese momento. La fecha de cierre suma dos plazos desde que se cumplen los 14 días: la ventana para enviar las capturas de permanencia (48 h) y el plazo del dev para validarlas (24 h).
+- Los 14 días empiezan cuando la app pasa a En prueba: no queda ninguna captura de instalación pendiente y las aprobadas llegan al mínimo de su plan (12 o 15). La plataforma muestra al dev dos fechas: desde cuándo puede solicitar producción a Google y la fecha en que su app se cierra a más tardar. Ambas se calculan para cada app al pasar a En prueba, con los valores vigentes en ese momento. La fecha de cierre suma dos plazos desde que se cumplen los 14 días: la ventana para enviar las capturas de permanencia (48 h) y el plazo del dev para validarlas (24 h).
 - Los postulantes adicionales se unen antes de que empiecen los 14 días, así que el día 14 y la ventana de permanencia son los mismos para todos los postulantes de la app.
 - La captura de permanencia es un compromiso de cada postulante con su captura de instalación aprobada, por el dev o sola. Quien recibió un rechazo de instalación no tiene permanencia, porque ese rechazo no afecta su calificación.
 - La captura de permanencia se envía cuando se cumplen los 14 días, dentro de una ventana de 48 h. Si el postulante no la envía, cuenta como no cumplida en su calificación.
