@@ -229,6 +229,7 @@ Cada dev tiene una sola app activa a la vez, que avanza según su turno en la co
 ### Registro
 
 - El usuario se registra e inicia sesión solo con su cuenta de Google (OAuth). No hay registro con email y contraseña.
+- Cada usuario tiene una marca de baneado, que se activa desde el panel de administración; por ejemplo, por textos ofensivos. Sus efectos están por definir (ver Pendientes).
 
 ### Subida de una app
 
@@ -471,9 +472,8 @@ La plataforma avisa en cada etapa del proceso, por email y con notificaciones we
 | Pasa a En progreso | Dev | "Alcanzaste tu mínimo de postulantes: valida sus capturas" |
 | Pasa a En progreso | Postulantes | "La app que pruebas alcanzó su mínimo de postulantes: el dev está validando las capturas" |
 | Pasa a En prueba | Dev y postulantes | "Se aprobó el mínimo de capturas: empiezan los 14 días" |
-| Pasa a Insuficiente | Dev | "Tu app no llegó al mínimo de capturas aprobadas" |
+| Pasa a Insuficiente y vuelve a la cola | Dev | "Tu app no llegó al mínimo de capturas aprobadas y volvió a la cola en la posición 3" |
 | Pasa a Insuficiente | Postulantes | "La app que pruebas no llegó al mínimo de capturas aprobadas y volvió a la cola: tus 14 días todavía no empiezan" |
-| Vuelve a la cola como Insuficiente | Dev | "Tu app volvió a la cola en la posición 3" |
 | Captura aprobada o rechazada | Postulante | "Rechazaron tu captura: no se ve la app instalada" |
 | Se abre la ventana de permanencia | Postulante | "Hoy toca tu captura de permanencia: tienes 48 h para enviarla" |
 | 12 h antes de que se cierre la ventana de permanencia | Postulante | "Te quedan 12 h para enviar tu captura de permanencia" |
@@ -642,7 +642,8 @@ El concepto está cerrado; quedan decisiones que se toman con datos, cerca del l
 ### Por decidir dentro del MVP
 
 - [ ] **Verificar que los cambios a nivel de sistema no afecten a procesos en curso:** definir en qué momento se toma el valor de cada parámetro que todavía no figura en Cambios de configuración. Ver la propuesta en [Propuesta para fijar los demás parámetros](#propuesta-para-fijar-los-demás-parámetros).
-- [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de los registros).
+- [ ] **Panel de administración:** alcance y funciones (editar los parámetros sin deploy, incidencias, reembolsos, historial de estados de los registros, banear usuarios).
+- [ ] **Efectos del baneo:** qué puede hacer un usuario baneado (iniciar sesión, postularse, subir apps), qué pasa con su app activa, sus postulaciones y sus compromisos pendientes, si lo que publicó sigue visible y si el baneo se puede revertir.
 
 ### Por decidir cerca del lanzamiento
 
